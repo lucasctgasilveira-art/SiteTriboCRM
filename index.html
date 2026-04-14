@@ -1804,7 +1804,7 @@
     <button type="button" class="lead-modal-close" aria-label="Fechar" onclick="closeLeadModal()">×</button>
     <h3 class="lead-modal-title">Comece seu teste grátis</h3>
     <p class="lead-modal-subtitle">Preencha seus dados e nossa equipe entrará em contato.</p>
-    <div id="leadModalForm" class="lead-modal-form"></div>
+    <div id="tribocrm-form-container" class="lead-modal-form"></div>
   </div>
 </div>
 
@@ -1841,20 +1841,19 @@
 <script>
   (function(){
     var modal = document.getElementById('leadModal');
-    var formContainer = document.getElementById('leadModalForm');
-    var loaded = false;
+    var embedLoaded = false;
     window.openLeadModal = function(e){
       if (e) e.preventDefault();
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden','false');
       document.body.classList.add('lead-modal-open');
-      if (!loaded) {
+      if (!embedLoaded) {
         var s = document.createElement('script');
         s.src = 'https://app.tribocrm.com.br/embed.js';
-        s.setAttribute('data-form','500a7204856f46149ed7a0b1');
-        s.setAttribute('data-theme','dark');
-        formContainer.appendChild(s);
-        loaded = true;
+        s.setAttribute('data-form', '500a7204856f46149ed7a0b1');
+        s.setAttribute('data-theme', 'dark');
+        document.getElementById('tribocrm-form-container').appendChild(s);
+        embedLoaded = true;
       }
     };
     window.closeLeadModal = function(){
