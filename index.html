@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TriboCRM — A Máquina de Vendas para PMEs Brasileiras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0b0f;
+    --surface: #111318;
+    --card: #161a22;
+    --card-hover: #1c2130;
+    --border: #22283a;
+    --accent: #f97316;
+    --accent-hover: #fb923c;
+    --accent-10: rgba(249,115,22,0.10);
+    --accent-20: rgba(249,115,22,0.20);
+    --text: #e8eaf0;
+    --text-2: #9ca3af;
+    --text-3: #6b7280;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.10);
+    --blue: #3b82f6;
+    --red: #ef4444;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(10,11,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+  .logo span:first-child { color: var(--text); font-weight: 400; }
+  .logo span:last-child { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-ghost-sm {
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-2);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-ghost-sm:hover { border-color: var(--accent); color: var(--text); }
+
+  .btn-primary {
+    padding: 9px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-primary-lg {
+    padding: 14px 32px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .btn-outline-lg {
+    padding: 13px 28px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-2);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-outline-lg:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    pointer-events: none;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+    bottom: 10%;
+    right: 10%;
+    pointer-events: none;
+  }
+
+  .badge-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-10);
+    border: 1px solid var(--accent-20);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: fadeInDown 0.6s ease both;
+  }
+
+  .badge-hero .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 24px;
+    animation: fadeInUp 0.7s ease 0.1s both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-2);
+    max-width: 580px;
+    margin-bottom: 40px;
+    font-weight: 400;
+    line-height: 1.7;
+    animation: fadeInUp 0.7s ease 0.2s both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.7s ease 0.3s both;
+  }
+
+  .hero-social-proof {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    animation: fadeInUp 0.7s ease 0.4s both;
+  }
+
+  .avatar-stack {
+    display: flex;
+  }
+  .avatar-stack .av {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .avatar-stack .av:first-child { margin-left: 0; }
+  .av-1 { background: #f97316; }
+  .av-2 { background: #3b82f6; }
+  .av-3 { background: #22c55e; }
+  .av-4 { background: #a855f7; }
+  .av-5 { background: #f59e0b; }
+
+  .social-proof-text {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .social-proof-text strong { color: var(--text); }
+
+  /* ── DASHBOARD MOCKUP ── */
+  .mockup-section {
+    padding: 0 24px 80px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mockup-wrapper {
+    position: relative;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .mockup-glow {
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(ellipse at center, rgba(249,115,22,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .mockup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    position: relative;
+  }
+
+  .mockup-bar {
+    background: var(--card);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red { background: #ef4444; }
+  .d-yellow { background: #f59e0b; }
+  .d-green { background: #22c55e; }
+
+  .mockup-url {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--text-3);
+    margin-left: 12px;
+  }
+
+  .mockup-content {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 420px;
+  }
+
+  .mock-sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  .mock-logo {
+    padding: 0 16px 16px;
+    font-size: 16px;
+    font-weight: 800;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .mock-logo span { color: var(--accent); }
+
+  .mock-menu-item {
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: default;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .mock-menu-item.active {
+    color: var(--accent);
+    background: var(--accent-10);
+    border-left-color: var(--accent);
+  }
+
+  .mock-menu-item .icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  .mock-main {
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .mock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .mock-title { font-size: 16px; font-weight: 700; }
+  .mock-subtitle { font-size: 11px; color: var(--text-3); }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .kpi-card.k1::before { background: var(--green); }
+  .kpi-card.k2::before { background: var(--accent); }
+  .kpi-card.k3::before { background: var(--blue); }
+  .kpi-card.k4::before { background: #a855f7; }
+
+  .kpi-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+  }
+
+  .kpi-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .kpi-card.k1 .kpi-value { color: var(--green); }
+  .kpi-card.k2 .kpi-value { color: var(--accent); }
+
+  .kpi-delta {
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .mock-pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .pipe-col {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .pipe-col-header {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-2);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pipe-col-count {
+    background: var(--border);
+    border-radius: 99px;
+    padding: 1px 6px;
+    font-size: 9px;
+    color: var(--text-3);
+  }
+
+  .pipe-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+
+  .pipe-card-name { font-size: 10px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .pipe-card-value { font-size: 11px; font-weight: 700; color: var(--accent); }
+  .pipe-card-value.won { color: var(--green); }
+
+  .pipe-card-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .pipe-action {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+  }
+  .pa-wa { background: rgba(37,209,102,0.15); color: #25d166; }
+  .pa-em { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .pa-ph { background: rgba(249,115,22,0.15); color: var(--accent); }
+
+  .temp-badge {
+    float: right;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 99px;
+  }
+  .temp-hot { background: var(--accent-10); color: var(--accent); }
+  .temp-cold { background: rgba(59,130,246,0.10); color: var(--blue); }
+  .temp-warm { background: rgba(245,158,11,0.10); color: #f59e0b; }
+
+  /* SECTIONS */
+  section { position: relative; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* ── DOR ── */
+  .pain-section {
+    padding: 80px 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .pain-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .pain-card:hover {
+    border-color: rgba(249,115,22,0.3);
+    transform: translateY(-2px);
+  }
+
+  .pain-emoji { font-size: 32px; margin-bottom: 16px; display: block; }
+
+  .pain-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .pain-desc {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .pain-arrow {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── FEATURES ── */
+  .features-section { padding: 100px 24px; }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent-20);
+    background: var(--card-hover);
+  }
+
+  .feature-card.featured {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(249,115,22,0.04) 0%, var(--card) 100%);
+    border-color: var(--accent-20);
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+    background: var(--accent-10);
+    border: 1px solid var(--accent-20);
+  }
+
+  .feature-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .feature-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    background: var(--accent-10);
+    border: 1px solid var(--accent-20);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+
+  .tag-blue {
+    background: rgba(59,130,246,0.10);
+    border-color: rgba(59,130,246,0.2);
+    color: var(--blue);
+  }
+
+  .tag-green {
+    background: var(--green-bg);
+    border-color: rgba(34,197,94,0.2);
+    color: var(--green);
+  }
+
+  /* ── VS SECTION ── */
+  .vs-section {
+    padding: 80px 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 48px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .vs-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-3);
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vs-table th.hl {
+    background: rgba(249,115,22,0.08);
+    color: var(--accent);
+    border-bottom-color: var(--accent-20);
+  }
+
+  .vs-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+  }
+
+  .vs-table tr:last-child td { border-bottom: none; }
+
+  .vs-table td.hl {
+    background: rgba(249,115,22,0.04);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .vs-table td:first-child {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .check { color: var(--green); font-size: 16px; }
+  .cross { color: var(--red); font-size: 16px; }
+  .partial { color: #f59e0b; font-size: 13px; }
+
+  /* ── PRICING ── */
+  .pricing-section { padding: 100px 24px; }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .plan-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    transition: all 0.25s;
+  }
+
+  .plan-card:hover { transform: translateY(-4px); }
+
+  .plan-card.featured-plan {
+    background: linear-gradient(160deg, rgba(249,115,22,0.06) 0%, var(--card) 60%);
+    border-color: var(--accent);
+    transform: scale(1.03);
+  }
+
+  .plan-card.featured-plan:hover { transform: scale(1.03) translateY(-4px); }
+
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-3);
+    margin-bottom: 8px;
+  }
+
+  .plan-price {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .plan-price sup {
+    font-size: 22px;
+    vertical-align: top;
+    margin-top: 10px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+
+  .plan-price sub {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-3);
+  }
+
+  .plan-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+    min-height: 48px;
+  }
+
+  .plan-features { list-style: none; margin-bottom: 28px; }
+  .plan-features li {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .plan-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .plan-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+  }
+
+  .plan-btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+  .plan-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+  .plan-btn-ghost {
+    background: transparent;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+  }
+  .plan-btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ── DEPOIMENTOS ── */
+  .testimonials-section { padding: 80px 24px; }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 56px;
+  }
+
+  .testimonial-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: all 0.25s;
+  }
+
+  .testimonial-card:hover {
+    border-color: var(--accent-20);
+    transform: translateY(-2px);
+  }
+
+  .stars { color: var(--accent); font-size: 14px; margin-bottom: 16px; }
+
+  .testimonial-text {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .t-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .t-name { font-size: 14px; font-weight: 700; }
+  .t-role { font-size: 12px; color: var(--text-3); }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 80px 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-list {
+    margin-top: 48px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 20px 0;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .faq-q:hover { color: var(--accent); }
+
+  .faq-icon {
+    width: 24px;
+    height: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    color: var(--text-2);
+  }
+
+  .faq-item.open .faq-icon {
+    background: var(--accent-10);
+    border-color: var(--accent-20);
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  .faq-a {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.8;
+    padding-bottom: 20px;
+    display: none;
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA FINAL ── */
+  .cta-section {
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(249,115,22,0.10) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .cta-section p {
+    font-size: 18px;
+    color: var(--text-2);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-guarantee {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 48px 24px;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-2); }
+
+  .footer-copy {
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .pain-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .plan-card.featured-plan { transform: none; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .mockup-content { grid-template-columns: 1fr; }
+    .mock-sidebar { display: none; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .mock-pipeline { grid-template-columns: repeat(2, 1fr); }
+    .vs-table { font-size: 12px; }
+    .vs-table th, .vs-table td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span>Tribo</span><span>CRM</span></a>
+  <ul class="nav-links">
+    <li><a href="#funcionalidades">Funcionalidades</a></li>
+    <li><a href="#comparativo">Comparativo</a></li>
+    <li><a href="#planos">Planos</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="https://app.tribocrm.com.br" class="btn-ghost-sm">Entrar</a>
+    <a href="https://app.tribocrm.com.br" class="btn-primary">Testar grátis →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="badge-hero">
+    <span class="dot"></span>
+    Criado pela Tribo de Vendas · 100% em português
+  </div>
+
+  <h1>O CRM que a sua equipe<br><em>vai querer usar</em></h1>
+
+  <p>Pipeline visual, WhatsApp integrado, automações inteligentes e a metodologia da Tribo de Vendas embutida. Tudo que você precisa para vender mais — sem complicar.</p>
+
+  <div class="hero-cta">
+    <a href="https://app.tribocrm.com.br" class="btn-primary btn-primary-lg">
+      Começar grátis por 30 dias →
+    </a>
+    <a href="#funcionalidades" class="btn-outline-lg">
+      Ver como funciona
+    </a>
+  </div>
+
+  <div class="hero-social-proof">
+    <div class="avatar-stack">
+      <div class="av av-1">RS</div>
+      <div class="av av-2">MC</div>
+      <div class="av av-3">PL</div>
+      <div class="av av-4">AF</div>
+      <div class="av av-5">BT</div>
+    </div>
+    <div class="social-proof-text">
+      Usado por <strong>gestores e vendedores</strong> de PMEs brasileiras
+    </div>
+  </div>
+</section>
+
+<!-- MOCKUP -->
+<div class="mockup-section">
+  <div class="mockup-wrapper">
+    <div class="mockup-glow"></div>
+    <div class="mockup">
+      <div class="mockup-bar">
+        <div class="mockup-dot d-red"></div>
+        <div class="mockup-dot d-yellow"></div>
+        <div class="mockup-dot d-green"></div>
+        <div class="mockup-url">app.tribocrm.com.br/gestao/dashboard</div>
+      </div>
+      <div class="mockup-content">
+        <div class="mock-sidebar">
+          <div class="mock-logo">Tribo<span>CRM</span></div>
+          <div class="mock-menu-item active"><span class="icon"></span> Dashboard</div>
+          <div class="mock-menu-item"><span class="icon"></span> Pipeline</div>
+          <div class="mock-menu-item"><span class="icon"></span> Leads</div>
+          <div class="mock-menu-item"><span class="icon"></span> Tarefas</div>
+          <div class="mock-menu-item"><span class="icon"></span> Metas</div>
+          <div class="mock-menu-item"><span class="icon"></span> Relatórios</div>
+          <div class="mock-menu-item"><span class="icon"></span> Automações</div>
+        </div>
+        <div class="mock-main">
+          <div class="mock-header">
+            <div>
+              <div class="mock-title">Dashboard · Abril 2026</div>
+              <div class="mock-subtitle">Últimos 30 dias · Toda a equipe</div>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card k1">
+              <div class="kpi-label">Receita do Mês</div>
+              <div class="kpi-value">R$ 87.500</div>
+              <div class="kpi-delta">↑ +23% vs mês anterior</div>
+            </div>
+            <div class="kpi-card k2">
+              <div class="kpi-label">Vendas Realizadas</div>
+              <div class="kpi-value">34</div>
+              <div class="kpi-delta" style="color:var(--accent)">↑ +8 vs anterior</div>
+            </div>
+            <div class="kpi-card k3">
+              <div class="kpi-label">Leads Ativos</div>
+              <div class="kpi-value" style="color:var(--blue)">218</div>
+              <div class="kpi-delta" style="color:var(--blue)">↑ +42 novos</div>
+            </div>
+            <div class="kpi-card k4">
+              <div class="kpi-label">Taxa de Conversão</div>
+              <div class="kpi-value" style="color:#a855f7">28%</div>
+              <div class="kpi-delta" style="color:#a855f7">↑ +4pp</div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;">Pipeline — Etapas Ativas</div>
+          <div class="mock-pipeline">
+            <div class="pipe-col">
+              <div class="pipe-col-header">Sem Contato <span class="pipe-col-count">12</span></div>
+              <div class="pipe-card">
+                <span class="temp-badge temp-hot">🔥</span>
+                <div class="pipe-card-name">Carlos M.</div>
+                <div class="pipe-card-value">R$ 8.400</div>
+                <div class="pipe-card-actions">
+                  <div class="pipe-action pa-wa">W</div>
+                  <div class="pipe-action pa-em">@</div>
+                  <div class="pipe-action pa-ph">📞</div>
+                </div>
+              </div>
+              <div class="pipe-card">
+                <span class="temp-badge temp-cold">❄️</span>
+                <div class="pipe-card-name">Ana Ferreira</div>
+                <div class="pipe-card-value">R$ 3.200</div>
+                <div class="pipe-card-actions">
+                  <div class="pipe-action pa-wa">W</div>
+                  <div class="pipe-action pa-em">@</div>
+                </div>
+              </div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-header">Negociando <span class="pipe-col-count">7</span></div>
+              <div class="pipe-card">
+                <span class="temp-badge temp-hot">🔥</span>
+                <div class="pipe-card-name">Tech Solutions</div>
+                <div class="pipe-card-value">R$ 24.000</div>
+                <div class="pipe-card-actions">
+                  <div class="pipe-action pa-wa">W</div>
+                  <div class="pipe-action pa-em">@</div>
+                  <div class="pipe-action pa-ph">📞</div>
+                </div>
+              </div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-header">Proposta Enviada <span class="pipe-col-count">5</span></div>
+              <div class="pipe-card">
+                <span class="temp-badge temp-warm">🌤</span>
+                <div class="pipe-card-name">Grupo Alfa</div>
+                <div class="pipe-card-value">R$ 15.800</div>
+                <div class="pipe-card-actions">
+                  <div class="pipe-action pa-wa">W</div>
+                  <div class="pipe-action pa-em">@</div>
+                </div>
+              </div>
+            </div>
+            <div class="pipe-col">
+              <div class="pipe-col-header">Venda Realizada <span class="pipe-col-count">34</span></div>
+              <div class="pipe-card">
+                <div class="pipe-card-name">Distribuidora Sul</div>
+                <div class="pipe-card-value won">✓ R$ 12.000</div>
+              </div>
+              <div class="pipe-card">
+                <div class="pipe-card-name">Clínica São João</div>
+                <div class="pipe-card-value won">✓ R$ 9.600</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOR -->
+<section class="pain-section" id="funcionalidades">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">O problema que todo gestor conhece</span>
+      <h2 class="section-title">Você usa planilha, WhatsApp e achismo para vender?</h2>
+      <p class="section-sub">Se sua equipe não tem um processo claro, você está perdendo vendas todos os dias sem saber.</p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card reveal">
+        <span class="pain-emoji">😤</span>
+        <div class="pain-title">Não sabe onde seu time está travado</div>
+        <div class="pain-desc">Você não consegue ver o funil em tempo real. As reuniões de pipeline são cheias de "acho que" e "vou verificar".</div>
+        <div class="pain-arrow">→ Com o TriboCRM você vê tudo em tempo real</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">📱</span>
+        <div class="pain-title">WhatsApp misturado com vida pessoal</div>
+        <div class="pain-desc">Mensagens de clientes somem entre fotos de família. Seu vendedor usa o pessoal para trabalho e ninguém controla.</div>
+        <div class="pain-arrow">→ WhatsApp integrado direto no card do lead</div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="pain-emoji">📊</span>
+        <div class="pain-title">CRM caro que ninguém usa</div>
+        <div class="pain-desc">Você já pagou por Pipedrive, HubSpot ou Bitrix24. A equipe odiou, você jogou fora o investimento.</div>
+        <div class="pain-arrow">→ Interface que vendedor adota no primeiro dia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="container">
+    <div class="reveal" style="text-align:center; margin-bottom:0;">
+      <span class="section-tag">Funcionalidades</span>
+      <h2 class="section-title">Tudo que você precisa, nada que atrapalha</h2>
+      <p class="section-sub" style="margin:0 auto;">Construído para o processo de venda brasileiro — com WhatsApp no centro de tudo.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card featured reveal">
+        <div>
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Pipeline Kanban Visual</div>
+          <div class="feature-desc">Arraste e solte leads entre as etapas do funil com total visibilidade. Cada card mostra o nome, valor, temperatura e ações rápidas de WhatsApp, e-mail e ligação — tudo em um clique.</div>
+          <div class="feature-tags">
+            <span class="tag">Drag & Drop</span>
+            <span class="tag">Múltiplos funis</span>
+            <span class="tag tag-green">Tempo real</span>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:16px;border:1px solid var(--border);">
+          <div style="font-size:11px;color:var(--text-3);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Funil Ativo · 47 leads</div>
+          <div style="display:flex;gap:8px;">
+            <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:8px;">Em Contato</div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px;margin-bottom:4px;">
+                <div style="font-size:9px;float:right;background:var(--accent-10);color:var(--accent);padding:1px 5px;border-radius:99px;">🔥</div>
+                <div style="font-size:10px;font-weight:700;">João Silva</div>
+                <div style="font-size:10px;color:var(--accent);font-weight:700;">R$ 12.000</div>
+                <div style="display:flex;gap:3px;margin-top:5px;">
+                  <div style="width:16px;height:16px;background:rgba(37,209,102,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;">W</div>
+                  <div style="width:16px;height:16px;background:rgba(59,130,246,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--blue);">@</div>
+                  <div style="width:16px;height:16px;background:rgba(249,115,22,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--accent);">☎</div>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:8px;">Negociando</div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px;margin-bottom:4px;">
+                <div style="font-size:9px;float:right;background:rgba(245,158,11,0.10);color:#f59e0b;padding:1px 5px;border-radius:99px;">🌤</div>
+                <div style="font-size:10px;font-weight:700;">Maria Costa</div>
+                <div style="font-size:10px;color:var(--accent);font-weight:700;">R$ 28.500</div>
+              </div>
+            </div>
+            <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:10px;font-weight:700;color:var(--text-3);margin-bottom:8px;">Venda Realizada</div>
+              <div style="background:var(--surface);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:8px;margin-bottom:4px;">
+                <div style="font-size:10px;font-weight:700;">Pedro Alves</div>
+                <div style="font-size:10px;color:var(--green);font-weight:700;">✓ R$ 9.000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">WhatsApp no Centro do CRM</div>
+        <div class="feature-desc">Clicou no ícone do WhatsApp, o sistema já registrou a interação. Sem precisar digitar nada. Histórico completo de todos os contatos com cada lead.</div>
+        <div class="feature-tags">
+          <span class="tag">Registro automático</span>
+          <span class="tag tag-green">WhatsApp Web</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Automações Inteligentes</div>
+        <div class="feature-desc">Configure uma vez e o CRM trabalha enquanto você dorme. Disparo de WhatsApp, alertas de leads inativos, tarefas automáticas por etapa do funil.</div>
+        <div class="feature-tags">
+          <span class="tag">28 templates prontos</span>
+          <span class="tag tag-blue">Sem código</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">🎓</div>
+        <div class="feature-title">Metodologia Tribo de Vendas Embutida</div>
+        <div class="feature-desc">O pipeline já vem configurado com as etapas certas. Modelos de mensagem baseados em boas práticas. Treinamentos e mentoria disponíveis direto no sistema.</div>
+        <div class="feature-tags">
+          <span class="tag">Mentoria inclusa</span>
+          <span class="tag">Treinamentos</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">🏆</div>
+        <div class="feature-title">Metas e Performance</div>
+        <div class="feature-desc">Configure metas individuais e por equipe com rampagem para vendedores novos. Dashboard motivador com ranking e alertas automáticos de ritmo.</div>
+        <div class="feature-tags">
+          <span class="tag">Por vendedor</span>
+          <span class="tag">Por equipe</span>
+          <span class="tag tag-green">Ranking</span>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Relatórios com Exportação Excel</div>
+        <div class="feature-desc">Filtre por período, vendedor ou equipe. Exporte qualquer relatório com um clique. Tome decisões com dados — não com achismo.</div>
+        <div class="feature-tags">
+          <span class="tag tag-blue">Filtros avançados</span>
+          <span class="tag">Export Excel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VS -->
+<section class="vs-section" id="comparativo">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-tag">Comparativo</span>
+      <h2 class="section-title">Por que o TriboCRM e não os outros?</h2>
+      <p class="section-sub" style="margin:0 auto;">CRMs internacionais custam em dólar e ninguém usa. CRMs nacionais são básicos demais. O TriboCRM é o meio-termo que faltava.</p>
+    </div>
+
+    <div style="overflow-x:auto; margin-top:48px;">
+      <table class="vs-table reveal">
+        <thead>
+          <tr>
+            <th>Funcionalidade</th>
+            <th class="hl">TriboCRM</th>
+            <th>HubSpot</th>
+            <th>Pipedrive</th>
+            <th>Agendor</th>
+            <th>RD Station</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Preço em Real (R$)</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>WhatsApp integrado no card</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="partial">parcial</span></td>
+          </tr>
+          <tr>
+            <td>Metodologia de vendas embutida</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Registro automático de interação</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Metas com rampagem</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Automações sem código</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="partial">parcial</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>30 dias grátis (sem cartão)</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="partial">14 dias</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="partial">7 dias</span></td>
+            <td><span class="partial">10 dias</span></td>
+          </tr>
+          <tr>
+            <td>Suporte em português</td>
+            <td class="hl"><span class="check">✓</span></td>
+            <td><span class="partial">limitado</span></td>
+            <td><span class="partial">limitado</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Preço por equipe de 5 pessoas</td>
+            <td class="hl" style="color:var(--green);">R$ 349/mês</td>
+            <td>R$ 2.200+/mês</td>
+            <td>R$ 700+/mês</td>
+            <td>R$ 265+/mês</td>
+            <td>R$ 500+/mês</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="planos">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-tag">Planos e Preços</span>
+      <h2 class="section-title">Simples, transparente, sem surpresas</h2>
+      <p class="section-sub" style="margin:0 auto;">Sem taxas ocultas, sem preço em dólar, sem contrato. Cancele quando quiser.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Essencial -->
+      <div class="plan-card reveal">
+        <div class="plan-name">Essencial</div>
+        <div class="plan-price"><sup>R$</sup>197<sub>/mês</sub></div>
+        <div class="plan-desc">Para pequenas equipes que querem organizar o processo comercial.</div>
+        <ul class="plan-features">
+          <li>Até 3 usuários</li>
+          <li>5.000 leads ativos</li>
+          <li>3 funis de vendas</li>
+          <li>Pipeline Kanban</li>
+          <li>WhatsApp + e-mail integrado</li>
+          <li>Importação/exportação Excel</li>
+          <li>Suporte por e-mail</li>
+        </ul>
+        <a href="https://app.tribocrm.com.br" class="plan-btn plan-btn-ghost">Começar grátis</a>
+      </div>
+
+      <!-- Pro (destaque) -->
+      <div class="plan-card featured-plan reveal">
+        <div class="plan-badge">⭐ Mais Popular</div>
+        <div class="plan-name" style="color:var(--accent);">Pro</div>
+        <div class="plan-price" style="color:var(--text);"><sup>R$</sup>349<sub>/mês</sub></div>
+        <div class="plan-desc">Para equipes que querem crescer com automações e metas.</div>
+        <ul class="plan-features">
+          <li>Até 5 usuários</li>
+          <li>10.000 leads ativos</li>
+          <li>10 funis de vendas</li>
+          <li>Tudo do Essencial</li>
+          <li><strong>10 automações ativas</strong></li>
+          <li><strong>Gestão completa de metas</strong></li>
+          <li><strong>Relatórios avançados + Excel</strong></li>
+          <li><strong>Formulários de captação</strong></li>
+          <li>Suporte e-mail + chat em 24h</li>
+        </ul>
+        <a href="https://app.tribocrm.com.br" class="plan-btn plan-btn-primary">Começar grátis →</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card reveal">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price"><sup>R$</sup>649<sub>/mês</sub></div>
+        <div class="plan-desc">Para equipes maiores com necessidades avançadas.</div>
+        <ul class="plan-features">
+          <li>Até 10 usuários</li>
+          <li>50.000 leads ativos</li>
+          <li>Automações ilimitadas</li>
+          <li>Tudo do Pro</li>
+          <li><strong>Onboarding assistido</strong></li>
+          <li><strong>WhatsApp prioritário 4h</strong></li>
+          <li><strong>Acesso antecipado a betas</strong></li>
+          <li>Usuários extras disponíveis</li>
+        </ul>
+        <a href="https://app.tribocrm.com.br" class="plan-btn plan-btn-ghost">Começar grátis</a>
+      </div>
+    </div>
+
+    <div class="reveal" style="text-align:center;margin-top:32px;">
+      <p style="font-size:14px;color:var(--text-3);">
+        💳 Sem cartão de crédito · ✓ 30 dias grátis · ↩ Cancele quando quiser
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="testimonials-section" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-tag">Depoimentos</span>
+      <h2 class="section-title">Quem usa, recomenda</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"Em 2 semanas a equipe já estava usando sem nenhum treinamento. O pipeline visual é incrível — finalmente consigo ver onde cada vendedor está travado."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:#f97316;">RM</div>
+          <div>
+            <div class="t-name">Ricardo Mendes</div>
+            <div class="t-role">Gestor Comercial · Construtora Mendes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"Tentei 3 CRMs antes. Todos foram abandonados pela equipe em menos de um mês. O TriboCRM é o primeiro que meus vendedores abrem todo dia — sem que eu precise pedir."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:#3b82f6;">PS</div>
+          <div>
+            <div class="t-name">Patrícia Souza</div>
+            <div class="t-role">Diretora Comercial · Agência Digital</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"O WhatsApp integrado no card do lead mudou tudo. Antes eu tinha mensagens espalhadas por 3 aparelhos. Agora está tudo em um lugar só — e o histórico nunca se perde."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:#22c55e;">FL</div>
+          <div>
+            <div class="t-name">Felipe Lima</div>
+            <div class="t-role">Corretor de Imóveis · Imobiliária Lima</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-tag">Dúvidas Frequentes</span>
+      <h2 class="section-title">Perguntas e respostas</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Preciso de cartão de crédito para testar?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Não. O período de teste de 30 dias é completamente gratuito, sem necessidade de cadastrar cartão. Você só escolhe um plano e paga quando decidir continuar.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Consigo importar meus leads da planilha?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Sim! O TriboCRM aceita importação via Excel com mapeamento automático das colunas. Em menos de 5 minutos você já tem todos os seus contatos dentro do sistema — sem perder nada.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Minha equipe vai conseguir usar sem treinamento?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Esse é o nosso principal diferencial. O TriboCRM tem um onboarding guiado de 3 passos que leva o usuário a configurar o funil, adicionar a equipe e importar leads em menos de 15 minutos. A interface foi projetada para o vendedor — não para o time de TI.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          O TriboCRM funciona com o WhatsApp da empresa?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Sim. O botão de WhatsApp em cada card do lead abre a conversa diretamente e registra a interação automaticamente no histórico do lead. Sem precisar copiar e colar nada — é um clique só.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Posso cancelar quando quiser?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Sim, sem multa e sem burocracia. Cancele diretamente pelo sistema em qualquer momento. Seus dados ficam disponíveis para exportar por 30 dias após o cancelamento.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          O TriboCRM tem relação com a Tribo de Vendas?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Sim! O TriboCRM foi desenvolvido pela equipe da Tribo de Vendas. A metodologia de vendas que ensinamos nos treinamentos está embutida no produto — no pipeline padrão, nos modelos de mensagem e nas automações sugeridas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="container" style="position:relative;">
+    <div class="reveal">
+      <h2>Pronto para montar sua<br><em style="color:var(--accent);">Máquina de Vendas?</em></h2>
+      <p>Comece agora. 30 dias grátis, sem cartão de crédito, sem complicação.</p>
+      <a href="https://app.tribocrm.com.br" class="btn-primary btn-primary-lg">
+        Criar minha conta grátis →
+      </a>
+      <div class="cta-guarantee">
+        🔒 Seus dados protegidos pela LGPD &nbsp;·&nbsp; ✓ Sem contrato &nbsp;·&nbsp; ↩ Cancele quando quiser
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="logo"><span>Tribo</span><span>CRM</span></a>
+    <ul class="footer-links">
+      <li><a href="#">Termos de Uso</a></li>
+      <li><a href="#">Política de Privacidade</a></li>
+      <li><a href="#">Suporte</a></li>
+      <li><a href="https://app.tribocrm.com.br">Entrar no sistema</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 TriboCRM · Tribo de Vendas</div>
+  </div>
+</footer>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
