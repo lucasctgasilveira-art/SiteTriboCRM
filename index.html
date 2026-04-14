@@ -1156,7 +1156,7 @@
   </ul>
   <div class="nav-cta">
     <a href="https://app.tribocrm.com.br" class="btn-ghost-sm">Entrar</a>
-    <a href="https://app.tribocrm.com.br" class="btn-primary">Testar grátis →</a>
+    <a href="#" onclick="openLeadModal(event)" class="btn-primary">Testar grátis →</a>
   </div>
 </nav>
 
@@ -1175,7 +1175,7 @@
   <p>Pipeline visual, WhatsApp integrado, automações inteligentes e a metodologia da Tribo de Vendas embutida. Tudo que você precisa para vender mais — sem complicar.</p>
 
   <div class="hero-cta">
-    <a href="https://app.tribocrm.com.br" class="btn-primary btn-primary-lg">
+    <a href="#" onclick="openLeadModal(event)" class="btn-primary btn-primary-lg">
       Começar grátis por 30 dias →
     </a>
     <a href="#funcionalidades" class="btn-outline-lg">
@@ -1603,7 +1603,7 @@
           <li><strong>Formulários de captação</strong></li>
           <li>Suporte e-mail + chat em 24h</li>
         </ul>
-        <a href="https://app.tribocrm.com.br" class="plan-btn plan-btn-primary">Começar grátis →</a>
+        <a href="#" onclick="openLeadModal(event)" class="plan-btn plan-btn-primary">Começar grátis →</a>
       </div>
 
       <!-- Enterprise -->
@@ -1748,7 +1748,7 @@
     <div class="reveal">
       <h2>Pronto para montar sua<br><em style="color:var(--accent);">Máquina de Vendas?</em></h2>
       <p>Comece agora. 30 dias grátis, sem cartão de crédito, sem complicação.</p>
-      <a href="https://app.tribocrm.com.br" class="btn-primary btn-primary-lg">
+      <a href="#" onclick="openLeadModal(event)" class="btn-primary btn-primary-lg">
         Criar minha conta grátis →
       </a>
       <div class="cta-guarantee">
@@ -1793,6 +1793,76 @@
   }, { threshold: 0.1 });
 
   reveals.forEach(el => observer.observe(el));
+</script>
+
+<div id="leadModal" class="lead-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lead-modal-overlay" onclick="closeLeadModal()"></div>
+  <div class="lead-modal-card">
+    <button type="button" class="lead-modal-close" aria-label="Fechar" onclick="closeLeadModal()">×</button>
+    <h3 class="lead-modal-title">Comece seu teste grátis</h3>
+    <p class="lead-modal-subtitle">Preencha seus dados e nossa equipe entrará em contato.</p>
+    <div id="leadModalForm" class="lead-modal-form"></div>
+  </div>
+</div>
+
+<style>
+  .lead-modal { position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .lead-modal.is-open { display: flex; }
+  .lead-modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
+  .lead-modal-card {
+    position: relative;
+    background: #111318;
+    border: 1px solid #22283a;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .lead-modal-close {
+    position: absolute; top: 12px; right: 16px;
+    background: transparent; border: none; color: #9ca3af;
+    font-size: 28px; line-height: 1; cursor: pointer; padding: 4px 8px;
+  }
+  .lead-modal-close:hover { color: #fff; }
+  .lead-modal-title {
+    font-family: 'DM Sans', sans-serif; font-weight: 700;
+    color: #fff; font-size: 24px; margin: 0 0 8px;
+  }
+  .lead-modal-subtitle { color: #9ca3af; margin: 0 0 20px; font-size: 15px; }
+  body.lead-modal-open { overflow: hidden; }
+</style>
+
+<script>
+  (function(){
+    var modal = document.getElementById('leadModal');
+    var formContainer = document.getElementById('leadModalForm');
+    var loaded = false;
+    window.openLeadModal = function(e){
+      if (e) e.preventDefault();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden','false');
+      document.body.classList.add('lead-modal-open');
+      if (!loaded) {
+        var s = document.createElement('script');
+        s.src = 'https://app.tribocrm.com.br/embed.js';
+        s.setAttribute('data-form','500a7204856f46149ed7a0b1');
+        s.setAttribute('data-theme','dark');
+        formContainer.appendChild(s);
+        loaded = true;
+      }
+    };
+    window.closeLeadModal = function(){
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden','true');
+      document.body.classList.remove('lead-modal-open');
+    };
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) window.closeLeadModal();
+    });
+  })();
 </script>
 
 </body>
