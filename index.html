@@ -1804,7 +1804,23 @@
     <button type="button" class="lead-modal-close" aria-label="Fechar" onclick="closeLeadModal()">×</button>
     <h3 class="lead-modal-title">Comece seu teste grátis</h3>
     <p class="lead-modal-subtitle">Preencha seus dados e nossa equipe entrará em contato.</p>
-    <div id="tribocrm-form-container" class="lead-modal-form"></div>
+    <div id="tribocrm-form">
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px;">
+        <input id="tcf-name" type="text" placeholder="Seu nome completo *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
+        <input id="tcf-email" type="email" placeholder="Seu e-mail *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
+        <input id="tcf-phone" type="tel" placeholder="Seu WhatsApp *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
+        <input id="tcf-company" type="text" placeholder="Nome da empresa" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
+        <div id="tcf-error" style="display:none;color:#ef4444;font-size:13px;"></div>
+        <button id="tcf-submit" onclick="submitTriboCRM()" style="background:#f97316;border:none;border-radius:8px;padding:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;width:100%;transition:background 0.2s;">
+          Quero começar grátis →
+        </button>
+        <div id="tcf-success" style="display:none;text-align:center;padding:20px;">
+          <div style="font-size:32px;margin-bottom:12px;">🎉</div>
+          <div style="font-size:18px;font-weight:700;color:#e8eaf0;margin-bottom:8px;">Recebemos seu contato!</div>
+          <div style="font-size:14px;color:#9ca3af;">Nossa equipe entrará em contato em breve pelo WhatsApp.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1841,20 +1857,11 @@
 <script>
   (function(){
     var modal = document.getElementById('leadModal');
-    var embedLoaded = false;
     window.openLeadModal = function(e){
       if (e) e.preventDefault();
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden','false');
       document.body.classList.add('lead-modal-open');
-      if (!embedLoaded) {
-        var s = document.createElement('script');
-        s.src = 'https://api.tribocrm.com.br/public/embed.js';
-        s.setAttribute('data-form', '500a7204856f46149ed7a0b1');
-        s.setAttribute('data-theme', 'dark');
-        document.getElementById('tribocrm-form-container').appendChild(s);
-        embedLoaded = true;
-      }
     };
     window.closeLeadModal = function(){
       modal.classList.remove('is-open');
@@ -1865,6 +1872,46 @@
       if (e.key === 'Escape' && modal.classList.contains('is-open')) window.closeLeadModal();
     });
   })();
+
+  async function submitTriboCRM() {
+    const name = document.getElementById('tcf-name').value.trim();
+    const email = document.getElementById('tcf-email').value.trim();
+    const phone = document.getElementById('tcf-phone').value.trim();
+    const company = document.getElementById('tcf-company').value.trim();
+    const error = document.getElementById('tcf-error');
+    const btn = document.getElementById('tcf-submit');
+
+    error.style.display = 'none';
+
+    if (!name || !email || !phone) {
+      error.textContent = 'Por favor, preencha nome, e-mail e WhatsApp.';
+      error.style.display = 'block';
+      return;
+    }
+
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://api.tribocrm.com.br/public/forms/500a7204856f46149ed7a0b1/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, company })
+      });
+
+      if (res.ok) {
+        document.getElementById('tribocrm-form').style.display = 'none';
+        document.getElementById('tcf-success').style.display = 'block';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      error.textContent = 'Erro ao enviar. Tente novamente.';
+      error.style.display = 'block';
+      btn.textContent = 'Quero começar grátis →';
+      btn.disabled = false;
+    }
+  }
 </script>
 
 </body>
