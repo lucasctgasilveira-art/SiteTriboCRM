@@ -1808,7 +1808,7 @@
       <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px;">
         <input id="tcf-name" type="text" placeholder="Seu nome completo *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
         <input id="tcf-email" type="email" placeholder="Seu e-mail *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
-        <input id="tcf-phone" type="tel" placeholder="Seu WhatsApp *" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
+        <input id="tcf-phone" type="tel" placeholder="Seu WhatsApp *" maxlength="15" oninput="maskPhoneBR(this)" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
         <input id="tcf-company" type="text" placeholder="Nome da empresa" style="background:#0a0b0f;border:1px solid #22283a;border-radius:8px;padding:12px 14px;color:#e8eaf0;font-size:14px;font-family:DM Sans,sans-serif;outline:none;width:100%;" />
         <div id="tcf-error" style="display:none;color:#ef4444;font-size:13px;"></div>
         <button id="tcf-submit" onclick="submitTriboCRM()" style="background:#f97316;border:none;border-radius:8px;padding:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;width:100%;transition:background 0.2s;">
@@ -1873,6 +1873,21 @@
     });
   })();
 
+  function maskPhoneBR(el) {
+    let v = el.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 10) {
+      el.value = v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+    } else if (v.length > 6) {
+      el.value = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    } else if (v.length > 2) {
+      el.value = v.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+    } else if (v.length > 0) {
+      el.value = v.replace(/^(\d{0,2}).*/, '($1');
+    } else {
+      el.value = '';
+    }
+  }
+
   async function submitTriboCRM() {
     const name = document.getElementById('tcf-name').value.trim();
     const email = document.getElementById('tcf-email').value.trim();
@@ -1885,6 +1900,13 @@
 
     if (!name || !email || !phone) {
       error.textContent = 'Por favor, preencha nome, e-mail e WhatsApp.';
+      error.style.display = 'block';
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      error.textContent = 'Por favor, insira um e-mail válido.';
       error.style.display = 'block';
       return;
     }
