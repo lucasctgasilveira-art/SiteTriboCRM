@@ -1896,7 +1896,12 @@
       const res = await fetch('https://api.tribocrm.com.br/public/forms/500a7204856f46149ed7a0b1/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, company })
+        body: JSON.stringify({
+          "Nome completo": name,
+          "E-mail": email,
+          "Telefone": phone,
+          "Empresa": company
+        })
       });
 
       if (res.ok) {
