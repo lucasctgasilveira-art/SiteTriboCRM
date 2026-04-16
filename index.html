@@ -1673,11 +1673,22 @@
       <p class="section-sub" style="margin:0 auto;">Sem taxas ocultas, sem preço em dólar, sem contrato. Cancele quando quiser.</p>
     </div>
 
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;">
+      <span id="lbl-mensal" style="font-size:14px;font-weight:600;color:#e8eaf0;cursor:pointer;">Mensal</span>
+      <div id="toggle-ciclo" onclick="switchCiclo()" style="width:52px;height:28px;background:#22283a;border-radius:99px;position:relative;cursor:pointer;border:1px solid #22283a;transition:background 0.3s;">
+        <div id="toggle-thumb" style="width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:3px;transition:left 0.3s;"></div>
+      </div>
+      <span id="lbl-anual" style="font-size:14px;font-weight:600;color:#9ca3af;cursor:pointer;">Anual</span>
+      <span style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#22c55e;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;">15% OFF</span>
+    </div>
+
     <div class="pricing-grid">
       <!-- Essencial -->
       <div class="plan-card reveal">
         <div class="plan-name">Essencial</div>
-        <div class="plan-price"><sup>R$</sup>197<sub>/mês</sub></div>
+        <div id="orig-essencial" style="font-size:13px;color:#6b7280;text-decoration:line-through;height:18px;"></div>
+        <div class="plan-price"><sup>R$</sup><span id="price-essencial">197</span><sub>/mês</sub></div>
+        <div id="econ-essencial" style="font-size:11px;color:#22c55e;font-weight:600;height:16px;margin-top:4px;"></div>
         <div class="plan-desc">Para pequenas equipes que querem organizar o processo comercial.</div>
         <ul class="plan-features">
           <li>Até 3 usuários</li>
@@ -1688,14 +1699,16 @@
           <li>Importação/exportação Excel</li>
           <li>Suporte por e-mail</li>
         </ul>
-        <a href="https://app.tribocrm.com.br/signup?plano=essencial" class="plan-btn plan-btn-ghost">Começar grátis</a>
+        <a href="#" onclick="goSignup(event, 'essencial')" class="plan-btn plan-btn-ghost">Começar grátis</a>
       </div>
 
       <!-- Pro (destaque) -->
       <div class="plan-card featured-plan reveal">
         <div class="plan-badge">⭐ Mais Popular</div>
         <div class="plan-name" style="color:var(--accent);">Pro</div>
-        <div class="plan-price" style="color:var(--text);"><sup>R$</sup>349<sub>/mês</sub></div>
+        <div id="orig-pro" style="font-size:13px;color:#6b7280;text-decoration:line-through;height:18px;"></div>
+        <div class="plan-price" style="color:var(--text);"><sup>R$</sup><span id="price-pro">349</span><sub>/mês</sub></div>
+        <div id="econ-pro" style="font-size:11px;color:#22c55e;font-weight:600;height:16px;margin-top:4px;"></div>
         <div class="plan-desc">Para equipes que querem crescer com automações e metas.</div>
         <ul class="plan-features">
           <li>Até 5 usuários</li>
@@ -1708,13 +1721,15 @@
           <li><strong>Formulários de captação</strong></li>
           <li>Suporte e-mail + chat em 24h</li>
         </ul>
-        <a href="https://app.tribocrm.com.br/signup?plano=pro" class="plan-btn plan-btn-primary">Começar grátis →</a>
+        <a href="#" onclick="goSignup(event, 'pro')" class="plan-btn plan-btn-primary">Começar grátis →</a>
       </div>
 
       <!-- Enterprise -->
       <div class="plan-card reveal">
         <div class="plan-name">Enterprise</div>
-        <div class="plan-price"><sup>R$</sup>649<sub>/mês</sub></div>
+        <div id="orig-enterprise" style="font-size:13px;color:#6b7280;text-decoration:line-through;height:18px;"></div>
+        <div class="plan-price"><sup>R$</sup><span id="price-enterprise">649</span><sub>/mês</sub></div>
+        <div id="econ-enterprise" style="font-size:11px;color:#22c55e;font-weight:600;height:16px;margin-top:4px;"></div>
         <div class="plan-desc">Para equipes maiores com necessidades avançadas.</div>
         <ul class="plan-features">
           <li>Até 10 usuários</li>
@@ -1726,7 +1741,7 @@
           <li><strong>Acesso antecipado a betas</strong></li>
           <li>Usuários extras disponíveis</li>
         </ul>
-        <a href="https://app.tribocrm.com.br/signup?plano=enterprise" class="plan-btn plan-btn-ghost">Começar grátis</a>
+        <a href="#" onclick="goSignup(event, 'enterprise')" class="plan-btn plan-btn-ghost">Começar grátis</a>
       </div>
     </div>
 
@@ -2005,6 +2020,33 @@
       if (e.key === 'Escape' && modal.classList.contains('is-open')) window.closeLeadModal();
     });
   })();
+
+  const cicloPrecos = {
+    mensal: { essencial: 197, pro: 349, enterprise: 649 },
+    anual:  { essencial: 167, pro: 297, enterprise: 552 }
+  };
+  const cicloEconomia = { essencial: 360, pro: 624, enterprise: 1164 };
+  let cicloAtual = 'mensal';
+
+  function switchCiclo() {
+    cicloAtual = cicloAtual === 'mensal' ? 'anual' : 'mensal';
+    const isAnual = cicloAtual === 'anual';
+    document.getElementById('toggle-ciclo').style.background = isAnual ? '#f97316' : '#22283a';
+    document.getElementById('toggle-thumb').style.left = isAnual ? '27px' : '3px';
+    document.getElementById('lbl-mensal').style.color = isAnual ? '#9ca3af' : '#e8eaf0';
+    document.getElementById('lbl-anual').style.color = isAnual ? '#e8eaf0' : '#9ca3af';
+
+    ['essencial','pro','enterprise'].forEach(plano => {
+      document.getElementById('price-' + plano).textContent = cicloPrecos[cicloAtual][plano];
+      document.getElementById('orig-' + plano).textContent = isAnual ? 'R$ ' + cicloPrecos.mensal[plano] + '/mês' : '';
+      document.getElementById('econ-' + plano).textContent = isAnual ? 'Economia de R$ ' + cicloEconomia[plano] + '/ano' : '';
+    });
+  }
+
+  function goSignup(e, plano) {
+    if (e) e.preventDefault();
+    window.location.href = 'https://app.tribocrm.com.br/signup?plano=' + plano + '&ciclo=' + cicloAtual;
+  }
 
   function maskPhoneBR(el) {
     let v = el.value.replace(/\D/g, '').slice(0, 11);
