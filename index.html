@@ -1699,7 +1699,7 @@
           <li>Importação/exportação Excel</li>
           <li>Suporte por e-mail</li>
         </ul>
-        <a href="#" onclick="goSignup(event, 'essencial')" class="plan-btn plan-btn-ghost">Começar grátis</a>
+        <a href="#" id="btn-essencial" onclick="goSignup(event, 'essencial')" class="plan-btn plan-btn-ghost">Começar grátis →</a>
       </div>
 
       <!-- Pro (destaque) -->
@@ -1721,7 +1721,7 @@
           <li><strong>Formulários de captação</strong></li>
           <li>Suporte e-mail + chat em 24h</li>
         </ul>
-        <a href="#" onclick="goSignup(event, 'pro')" class="plan-btn plan-btn-primary">Começar grátis →</a>
+        <a href="#" id="btn-pro" onclick="goSignup(event, 'pro')" class="plan-btn plan-btn-primary">Começar grátis →</a>
       </div>
 
       <!-- Enterprise -->
@@ -1741,7 +1741,7 @@
           <li><strong>Acesso antecipado a betas</strong></li>
           <li>Usuários extras disponíveis</li>
         </ul>
-        <a href="#" onclick="goSignup(event, 'enterprise')" class="plan-btn plan-btn-ghost">Começar grátis</a>
+        <a href="#" id="btn-enterprise" onclick="goSignup(event, 'enterprise')" class="plan-btn plan-btn-ghost">Começar grátis →</a>
       </div>
     </div>
 
@@ -2040,6 +2040,11 @@
       document.getElementById('price-' + plano).textContent = cicloPrecos[cicloAtual][plano];
       document.getElementById('orig-' + plano).textContent = isAnual ? 'R$ ' + cicloPrecos.mensal[plano] + '/mês' : '';
       document.getElementById('econ-' + plano).textContent = isAnual ? 'Economia de R$ ' + cicloEconomia[plano] + '/ano' : '';
+    });
+
+    ['essencial','pro','enterprise'].forEach(plano => {
+      const btn = document.getElementById('btn-' + plano);
+      if (btn) btn.textContent = isAnual ? 'Garantir 15% OFF →' : 'Começar grátis →';
     });
   }
 
