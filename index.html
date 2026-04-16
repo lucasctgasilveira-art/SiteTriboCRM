@@ -2050,7 +2050,9 @@
 
   function goSignup(e, plano) {
     if (e) e.preventDefault();
-    window.location.href = 'https://app.tribocrm.com.br/signup?plano=' + plano + '&ciclo=' + cicloAtual;
+    console.log('cicloAtual:', cicloAtual);
+    const url = 'https://app.tribocrm.com.br/signup?plano=' + plano + '&ciclo=' + cicloAtual;
+    window.location.href = url;
   }
 
   function maskPhoneBR(el) {
