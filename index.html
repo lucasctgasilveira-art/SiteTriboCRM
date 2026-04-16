@@ -2048,11 +2048,14 @@
     });
   }
 
+  let planoPendente = null;
+  let cicloPendente = null;
+
   function goSignup(e, plano) {
     if (e) e.preventDefault();
-    console.log('cicloAtual:', cicloAtual);
-    const url = 'https://app.tribocrm.com.br/signup?plano=' + plano + '&ciclo=' + cicloAtual;
-    window.location.href = url;
+    planoPendente = plano;
+    cicloPendente = cicloAtual;
+    openLeadModal(e);
   }
 
   function maskPhoneBR(el) {
@@ -2109,6 +2112,17 @@
       });
 
       if (res.ok) {
+        if (planoPendente) {
+          const params = new URLSearchParams({
+            plano: planoPendente,
+            ciclo: cicloPendente || 'mensal',
+            nome: name,
+            email: email,
+            telefone: phone
+          });
+          window.location.href = 'https://app.tribocrm.com.br/signup?' + params.toString();
+          return;
+        }
         document.getElementById('tribocrm-form').style.display = 'none';
         document.getElementById('tcf-success').style.display = 'block';
       } else {
