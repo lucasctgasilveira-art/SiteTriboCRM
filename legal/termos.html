@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Termos de Uso do TriboCRM — CRM na modalidade SaaS operado pela Única Soluções Financeiras e Educacionais Eireli.">
+  <title>Termos de Uso — TriboCRM</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/favicon-512x512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --surface: #111318;
+      --card: #161a22;
+      --card-hover: #1c2130;
+      --border: #22283a;
+      --accent: #f97316;
+      --accent-hover: #fb923c;
+      --accent-10: rgba(249,115,22,0.10);
+      --accent-20: rgba(249,115,22,0.20);
+      --text: #e8eaf0;
+      --text-2: #9ca3af;
+      --text-3: #6b7280;
+      --green: #22c55e;
+      --green-bg: rgba(34,197,94,0.10);
+      --blue: #3b82f6;
+      --red: #ef4444;
+    }
+    html[data-theme="light"] {
+      --bg: #f8f9fc;
+      --surface: #ffffff;
+      --card: #ffffff;
+      --card-hover: #f1f3f8;
+      --border: #e2e5ed;
+      --text: #0f1117;
+      --text-2: #4b5563;
+      --text-3: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(10, 11, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    html[data-theme="light"] nav { background: rgba(248, 249, 252, 0.85); }
+    .logo {
+      font-weight: 800; font-size: 22px; text-decoration: none;
+      display: flex; gap: 2px;
+    }
+    .logo span:first-child { color: var(--text); }
+    .logo span:last-child { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      color: var(--text-2); text-decoration: none; font-size: 15px;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text); font-size: 16px; padding: 6px 10px;
+      border-radius: 8px; cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { background: var(--card); }
+    .btn-ghost-sm {
+      color: var(--text-2); text-decoration: none; font-size: 14px;
+      font-weight: 600; padding: 8px 14px; border-radius: 8px;
+      transition: color 0.2s;
+    }
+    .btn-ghost-sm:hover { color: var(--text); }
+    .btn-primary {
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-size: 14px; font-weight: 600; padding: 10px 18px;
+      border-radius: 10px; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    /* CONTENT */
+    main {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 64px 32px 80px;
+    }
+    .page-header { margin-bottom: 48px; }
+    .page-tag {
+      display: inline-block; padding: 6px 14px; border-radius: 999px;
+      background: var(--accent-10); color: var(--accent);
+      font-size: 13px; font-weight: 600; margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 42px; font-weight: 800; line-height: 1.2;
+      margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .page-meta {
+      color: var(--text-3); font-size: 14px;
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .page-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+    article h2 {
+      font-size: 26px; font-weight: 700; margin-top: 48px; margin-bottom: 16px;
+      color: var(--text); letter-spacing: -0.01em;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    article h3 {
+      font-size: 19px; font-weight: 600; margin-top: 28px; margin-bottom: 10px;
+      color: var(--text);
+    }
+    article p { color: var(--text-2); margin-bottom: 14px; font-size: 16px; line-height: 1.7; }
+    article ul, article ol { color: var(--text-2); margin-bottom: 14px; padding-left: 24px; line-height: 1.7; }
+    article li { margin-bottom: 6px; }
+    article strong { color: var(--text); font-weight: 600; }
+    article a { color: var(--accent); text-decoration: none; }
+    article a:hover { text-decoration: underline; }
+
+    article table {
+      width: 100%; border-collapse: collapse; margin: 20px 0;
+      background: var(--card); border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    article th, article td {
+      padding: 12px 16px; text-align: left; font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    article th {
+      background: var(--surface); color: var(--text); font-weight: 600;
+    }
+    article td { color: var(--text-2); }
+    article tr:last-child td { border-bottom: none; }
+
+    .callout {
+      background: var(--accent-10); border-left: 4px solid var(--accent);
+      padding: 16px 20px; border-radius: 8px; margin: 24px 0;
+      color: var(--text-2); font-size: 15px;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--text-2); text-decoration: none; font-size: 14px;
+      font-weight: 500; margin-top: 48px; padding: 10px 16px;
+      border: 1px solid var(--border); border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .back-link:hover { color: var(--text); background: var(--card); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px 32px;
+      background: var(--surface); margin-top: 80px;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .footer-links {
+      display: flex; gap: 24px; list-style: none; flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--text-2); text-decoration: none; font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-copy { color: var(--text-3); font-size: 13px; }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      main { padding: 40px 20px 60px; }
+      h1 { font-size: 32px; }
+      article h2 { font-size: 22px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo"><span>Tribo</span><span>CRM</span></a>
+    <ul class="nav-links">
+      <li><a href="/#funcionalidades">Funcionalidades</a></li>
+      <li><a href="/#comparativo">Comparativo</a></li>
+      <li><a href="/#planos">Planos</a></li>
+      <li><a href="/#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema" onclick="toggleTheme()">☀️</button>
+      <a href="https://app.tribocrm.com.br" class="btn-ghost-sm">Entrar</a>
+      <a href="https://app.tribocrm.com.br/signup" class="btn-primary">Testar grátis →</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <span class="page-tag">Documento Legal</span>
+      <h1>Termos de Uso</h1>
+      <div class="page-meta">
+        <span>📅 Versão 2.0 · Abril de 2026</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      O TriboCRM é uma marca operada pela <strong>Única Soluções Financeiras e Educacionais Eireli</strong>, CNPJ <strong>32.285.015/0001-30</strong>, com sede na Rua Adolfo de Matos, 48, ap 01, Bairro Manoel Ribeiro Sobrinho, Caratinga-MG, CEP 35300-168.
+    </div>
+
+    <article>
+      <h2>1. Definições</h2>
+      <p><strong>TriboCRM</strong> ou <strong>Plataforma:</strong> software de CRM acessível em <a href="https://app.tribocrm.com.br">app.tribocrm.com.br</a>, desenvolvido e operado pela Única Soluções Financeiras e Educacionais Eireli.</p>
+      <p><strong>Única Soluções Financeiras e Educacionais Eireli:</strong> pessoa jurídica responsável pela operação do TriboCRM, doravante denominada "nós" ou "TriboCRM".</p>
+      <p><strong>Cliente:</strong> pessoa física ou jurídica que contrata o TriboCRM, responsável pelo pagamento e pela gestão da conta.</p>
+      <p><strong>Usuário:</strong> qualquer pessoa que acessa a plataforma em nome do Cliente (gestor, líder, vendedor).</p>
+      <p><strong>Tenant:</strong> espaço isolado na plataforma que representa a conta do Cliente.</p>
+      <p><strong>Dados do Cliente:</strong> todos os dados inseridos, importados ou gerados pelos Usuários na plataforma.</p>
+
+      <h2>2. Aceitação dos Termos</h2>
+      <p>Ao criar uma conta, clicar em "Aceito os Termos de Uso" ou utilizar a plataforma, o Cliente declara ter lido, compreendido e aceito integralmente estes Termos e nossa Política de Privacidade.</p>
+      <p>A aceitação constitui um contrato juridicamente vinculante regido pelas leis brasileiras.</p>
+
+      <h2>3. Objeto do Contrato</h2>
+      <p>O TriboCRM oferece ao Cliente acesso a um CRM na modalidade SaaS (Software as a Service), via navegador web, mediante assinatura mensal ou anual conforme o plano contratado.</p>
+      <p>A plataforma inclui, conforme o plano:</p>
+      <ul>
+        <li>Pipeline de vendas com visualização Kanban</li>
+        <li>Gestão de leads e histórico de interações</li>
+        <li>Gestão de equipes e usuários com permissões granulares</li>
+        <li>Integrações com Gmail e Google Calendar</li>
+        <li>Automações de processo comercial</li>
+        <li>Formulários de captação de leads</li>
+        <li>Relatórios e dashboards</li>
+        <li>Acesso a Mentoria e Treinamentos</li>
+        <li>Demais funcionalidades descritas em <a href="/#planos">tribocrm.com.br/planos</a></li>
+      </ul>
+
+      <h2>4. Cadastro e Conta de Acesso</h2>
+      <h3>4.1 Dados de cadastro</h3>
+      <p>O Cliente deve fornecer informações verdadeiras e mantê-las atualizadas. O TriboCRM não se responsabiliza por problemas decorrentes de informações incorretas.</p>
+
+      <h3>4.2 Credenciais</h3>
+      <p>O Cliente é responsável pela guarda e sigilo das credenciais de todos os seus Usuários. Qualquer acesso com credenciais válidas é considerado realizado pelo próprio Cliente.</p>
+      <p>Em caso de suspeita de acesso não autorizado, notificar imediatamente <a href="mailto:suporte@tribocrm.com.br">suporte@tribocrm.com.br</a> e redefinir as senhas comprometidas.</p>
+
+      <h3>4.3 Requisitos mínimos</h3>
+      <ul>
+        <li>Conexão à internet estável</li>
+        <li>Navegador atualizado (Chrome, Firefox, Safari ou Edge — últimas 2 versões)</li>
+        <li>Endereço de e-mail válido</li>
+      </ul>
+
+      <h3>4.4 Limite de usuários</h3>
+      <p>O número de usuários é definido pelo plano contratado. Usuários extras disponíveis nos planos Essencial, Pro e Enterprise mediante cobrança adicional.</p>
+
+      <h2>5. Planos, Preços e Pagamentos</h2>
+      <h3>5.1 Planos disponíveis</h3>
+      <p>Solo (R$ 69/mês), Essencial (R$ 197/mês), Pro (R$ 349/mês) e Enterprise (R$ 649/mês). Detalhes completos em <a href="/#planos">tribocrm.com.br/planos</a>.</p>
+
+      <h3>5.2 Preços</h3>
+      <p>Os preços vigentes são os exibidos no momento da contratação. O TriboCRM pode alterar preços com comunicação prévia de 30 dias por e-mail.</p>
+
+      <h3>5.3 Formas de pagamento (via Banco Efi)</h3>
+      <ul>
+        <li>PIX — geração automática de QR Code</li>
+        <li>Boleto bancário</li>
+        <li>Cartão de crédito — débito automático mensal ou anual</li>
+      </ul>
+
+      <h3>5.4 Ciclo de cobrança</h3>
+      <ul>
+        <li><strong>Mensal:</strong> cobrança no mesmo dia do mês em que a assinatura foi iniciada</li>
+        <li><strong>Anual:</strong> cobrança única antecipada com 15% de desconto</li>
+      </ul>
+
+      <h3>5.5 Notas fiscais</h3>
+      <p>O TriboCRM emite NF-e de serviço para cada pagamento confirmado, enviada ao e-mail do Cliente.</p>
+
+      <h2>6. Período Grátis</h2>
+      <p>Todos os novos clientes têm direito a <strong>30 dias gratuitos</strong> para experimentar qualquer plano escolhido (Solo, Essencial, Pro ou Enterprise). Durante esse período, o cliente pode cancelar sem custo a qualquer momento.</p>
+      <p>Ao final dos 30 dias, a cobrança é processada automaticamente de acordo com o plano e ciclo contratados no momento do cadastro, salvo cancelamento prévio pelo Cliente.</p>
+      <p>Um mesmo CPF ou CNPJ pode utilizar o período gratuito apenas uma vez.</p>
+      <p>O TriboCRM reserva-se o direito de encerrar ou modificar os períodos de gratuidade para novos cadastros, sem afetar trials já iniciados.</p>
+
+      <h2>7. Renovação e Cancelamento</h2>
+      <h3>7.1 Renovação automática</h3>
+      <p>Assinaturas renovadas automaticamente ao final de cada período. Cliente notificado por e-mail 7 dias antes de cada renovação.</p>
+
+      <h3>7.2 Cancelamento pelo Cliente</h3>
+      <p>A qualquer momento em Configurações → Minha Assinatura ou por e-mail para <a href="mailto:suporte@tribocrm.com.br">suporte@tribocrm.com.br</a>. O acesso permanece ativo até o final do período pago. <strong>Sem reembolso proporcional</strong> por dias não utilizados, exceto conforme o CDC.</p>
+
+      <h3>7.3 Direito de arrependimento</h3>
+      <p>Contratos firmados eletronicamente: direito de arrependimento com reembolso integral em até <strong>7 dias corridos</strong> da contratação, conforme art. 49 do CDC (Lei 8.078/90).</p>
+
+      <h3>7.4 Exportação de dados antes do cancelamento</h3>
+      <p>O Cliente pode exportar todos os dados em Excel/CSV antes do cancelamento em Configurações → Exportar Dados.</p>
+
+      <h2>8. Suspensão e Inadimplência</h2>
+      <table>
+        <thead>
+          <tr><th>Dia</th><th>Ação</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>D+0 (vencimento)</td><td>Cobrança automática + e-mail de lembrete</td></tr>
+          <tr><td>D+2</td><td>Pop-up de aviso no login de todos os usuários do tenant</td></tr>
+          <tr><td>D+5</td><td>Bloqueio de funções premium (importar/exportar leads)</td></tr>
+          <tr><td>D+7</td><td>E-mail de aviso de suspensão iminente</td></tr>
+          <tr><td>D+10</td><td>Suspensão total do acesso (dados preservados)</td></tr>
+          <tr><td>D+90</td><td>Conta marcada para encerramento — prazo final notificado</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Reativação:</strong> automática em até 5 minutos após confirmação do pagamento via webhook do Efi.</p>
+      <p><strong>Encerramento definitivo:</strong> após 90 dias sem pagamento e sem contato, conta encerrada após notificação com prazo de 15 dias.</p>
+
+      <h2>9. Uso Aceitável</h2>
+      <h3>9.1 O Cliente se compromete a:</h3>
+      <ul>
+        <li>Usar a plataforma para fins legítimos e lícitos</li>
+        <li>Respeitar a privacidade dos titulares dos dados cadastrados</li>
+        <li>Obter consentimento adequado para coletar e armazenar dados de terceiros</li>
+        <li>Notificar o TriboCRM imediatamente em caso de suspeita de uso indevido</li>
+      </ul>
+
+      <h3>9.2 É expressamente proibido:</h3>
+      <ul>
+        <li>Envio de spam ou comunicações não solicitadas em massa</li>
+        <li>Tentativas de acessar dados de outros tenants</li>
+        <li>Engenharia reversa ou modificação do código da plataforma</li>
+        <li>Uso de robôs ou scripts para extração de dados em volume</li>
+        <li>Revenda ou sublicenciamento do acesso a terceiros sem autorização</li>
+        <li>Uso para atividades ilegais, fraudulentas ou que violem direitos de terceiros</li>
+      </ul>
+
+      <h3>9.3 Consequências</h3>
+      <p>O descumprimento pode resultar em suspensão imediata sem reembolso e responsabilização civil e criminal.</p>
+
+      <h2>10. Dados e Propriedade</h2>
+      <h3>10.1 Propriedade dos dados</h3>
+      <p>Os Dados do Cliente pertencem exclusivamente ao Cliente. O TriboCRM não reivindica propriedade sobre os dados inseridos.</p>
+
+      <h3>10.2 Uso dos dados pelo TriboCRM</h3>
+      <p>Usados exclusivamente para prestar o serviço contratado. Não são vendidos ou compartilhados com terceiros para fins comerciais. Regidos pela <a href="/legal/privacidade.html">Política de Privacidade</a> e <a href="/legal/dpa.html">DPA LGPD</a>.</p>
+
+      <h3>10.3 Backups</h3>
+      <p>O TriboCRM realiza backups diários automáticos. O Cliente é responsável por exportar suas próprias cópias dos dados críticos.</p>
+
+      <h3>10.4 Exclusão de dados</h3>
+      <p>Após encerramento da conta, dados excluídos conforme cronograma da Política de Privacidade. Exclusão antecipada solicitada em <a href="mailto:privacidade@tribocrm.com.br">privacidade@tribocrm.com.br</a>.</p>
+
+      <h2>11. Disponibilidade e SLA</h2>
+      <ul>
+        <li><strong>Uptime:</strong> compromisso de 99,5% mensal</li>
+        <li><strong>Manutenção programada:</strong> comunicada com mínimo de 48h, preferencialmente terças das 23h às 2h</li>
+        <li><strong>Incidentes:</strong> atualizações em status.tribocrm.com.br e comunicação por e-mail aos afetados</li>
+        <li>O TriboCRM não garante disponibilidade ininterrupta e não se responsabiliza por indisponibilidades causadas por fatores externos (internet, hospedagem, serviços de terceiros)</li>
+      </ul>
+
+      <h2>12. Limitação de Responsabilidade</h2>
+      <ul>
+        <li>O TriboCRM não se responsabiliza por danos indiretos, lucros cessantes ou perda de oportunidades</li>
+        <li>A responsabilidade total está limitada ao valor pago nos últimos 3 meses de assinatura</li>
+        <li>O Cliente é inteiramente responsável pelo uso da plataforma e pelo cumprimento das obrigações legais relacionadas ao tratamento de dados de seus contatos, incluindo a LGPD</li>
+      </ul>
+
+      <h2>13. Propriedade Intelectual</h2>
+      <p>O TriboCRM, incluindo código-fonte, design, interfaces, logotipos, metodologias e documentação, é propriedade exclusiva da Única Soluções Financeiras e Educacionais Eireli, protegida pela Lei 9.610/98.</p>
+      <p>O Cliente recebe licença de uso não exclusiva, intransferível e revogável durante a vigência do contrato. Esta licença não implica cessão de quaisquer direitos de propriedade intelectual.</p>
+
+      <h2>14. Alterações nos Termos</h2>
+      <p>Alterações relevantes comunicadas com antecedência mínima de 30 dias por e-mail. O uso continuado após o prazo constitui aceitação. Se o Cliente não concordar, pode cancelar sem penalidades antes da entrada em vigor.</p>
+
+      <h2>15. Disposições Gerais</h2>
+      <p><strong>Lei aplicável:</strong> Leis da República Federativa do Brasil — Código Civil (Lei 10.406/02), CDC (Lei 8.078/90), LGPD (Lei 13.709/18) e Marco Civil da Internet (Lei 12.965/14).</p>
+      <p><strong>Foro:</strong> Comarca de Caratinga-MG, sede da Única Soluções Financeiras e Educacionais Eireli, com renúncia a qualquer outro.</p>
+      <p><strong>Integralidade:</strong> estes Termos, junto com a <a href="/legal/privacidade.html">Política de Privacidade</a> e o <a href="/legal/dpa.html">DPA LGPD</a>, constituem o acordo integral entre as partes.</p>
+      <p><strong>Contato jurídico:</strong> <a href="mailto:juridico@tribocrm.com.br">juridico@tribocrm.com.br</a></p>
+
+      <p style="margin-top: 40px; color: var(--text-3); font-style: italic; font-size: 14px;">Última atualização: Abril de 2026</p>
+    </article>
+
+    <a href="/" class="back-link">← Voltar ao site</a>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="logo"><span>Tribo</span><span>CRM</span></a>
+      <ul class="footer-links">
+        <li><a href="/legal/termos.html">Termos de Uso</a></li>
+        <li><a href="/legal/privacidade.html">Política de Privacidade</a></li>
+        <li><a href="/legal/dpa.html">DPA LGPD</a></li>
+        <li><a href="mailto:suporte@tribocrm.com.br">Suporte</a></li>
+        <li><a href="https://app.tribocrm.com.br">Entrar no sistema</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 TriboCRM · Única Soluções Financeiras e Educacionais Eireli</div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      document.getElementById('themeToggle').textContent = next === 'light' ? '🌙' : '☀️';
+    }
+    try {
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeToggle').textContent = saved === 'light' ? '🌙' : '☀️';
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>
