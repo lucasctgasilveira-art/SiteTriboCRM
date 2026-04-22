@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propósito Único — Extensão TriboCRM</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; max-width: 780px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.65; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  h2 { font-size: 20px; margin-top: 36px; color: #111; }
+  .badge { display: inline-block; background: #f1f3f7; color: #666; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin-bottom: 12px; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 28px; }
+  a { color: #f97316; }
+  .purpose { background: #fff7ed; border-left: 3px solid #f97316; padding: 16px 20px; margin: 24px 0; font-size: 15px; }
+  hr { border: none; border-top: 1px solid #e5e5e5; margin: 40px 0 20px; }
+  .footer-back { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="badge">Chrome Web Store — Declaração Oficial</div>
+
+<h1>Declaração de Propósito Único</h1>
+<p class="meta">📅 Versão 1.0 · Abril de 2026 · Extensão TriboCRM para WhatsApp Web</p>
+
+<p>Este documento atende à exigência da <strong>Chrome Web Store</strong> de declaração clara e única do propósito da Extensão, conforme as políticas do Programa de Desenvolvedores do Google Chrome.</p>
+
+<h2>Propósito único</h2>
+
+<div class="purpose">
+A Extensão TriboCRM para WhatsApp Web tem o <strong>propósito único</strong> de permitir que usuários autenticados do TriboCRM visualizem e gerenciem os dados do seu próprio CRM diretamente sobre a página do WhatsApp Web, eliminando a necessidade de alternar entre abas do navegador durante atendimentos comerciais.
+</div>
+
+<h2>Como isso se traduz em funcionalidades</h2>
+
+<p>Para cumprir esse propósito único, a Extensão:</p>
+
+<ul>
+<li>Adiciona um painel lateral à página <code>web.whatsapp.com</code></li>
+<li>Identifica o contato da conversa atualmente aberta (nome exibido e, quando disponível, número de telefone)</li>
+<li>Busca esse contato na conta do TriboCRM do Usuário através de uma API autenticada</li>
+<li>Exibe os dados do lead correspondente no painel lateral</li>
+<li>Permite o registro manual de interações e o uso de modelos de mensagem pré-configurados</li>
+</ul>
+
+<h2>Justificativa das permissões solicitadas</h2>
+
+<p>A Extensão solicita apenas as permissões estritamente necessárias para cumprir seu propósito único:</p>
+
+<p><strong><code>storage</code></strong> — armazenar localmente o token de autenticação, preferência de tema e estado do painel. Necessário para manter o Usuário logado entre sessões e preservar suas preferências visuais.</p>
+
+<p><strong><code>alarms</code></strong> — executar verificações periódicas de mensagens agendadas pelo Usuário. Necessário para a funcionalidade de envio programado, que permite ao Usuário planejar follow-ups.</p>
+
+<p><strong><code>notifications</code></strong> — exibir notificações do sistema quando mensagens agendadas são processadas. Auxilia o Usuário a acompanhar ações em segundo plano da Extensão.</p>
+
+<p><strong><code>host_permissions: https://web.whatsapp.com/*</code></strong> — injetar o painel lateral na página do WhatsApp Web. Essa é a razão de ser da Extensão.</p>
+
+<p><strong><code>host_permissions: https://api.tribocrm.com.br/*</code></strong> — comunicar-se com o backend do TriboCRM para autenticação e operações de leads. Necessário para buscar e atualizar dados do CRM do Usuário.</p>
+
+<h2>Uso de código remoto</h2>
+
+<p>A Extensão <strong>não executa código remoto</strong>. Todo o código JavaScript é empacotado no momento da publicação e distribuído via Chrome Web Store. Nenhum script externo é carregado em tempo de execução.</p>
+
+<h2>Uso de dados do usuário</h2>
+
+<p>Detalhes completos sobre dados coletados, armazenados e transmitidos estão na <a href="https://www.tribocrm.com.br/legal/extensao-privacidade.html">Política de Privacidade da Extensão</a>.</p>
+
+<p>Em resumo:</p>
+<ul>
+<li>A Extensão lê apenas o contato da conversa ativa no WhatsApp Web</li>
+<li>A Extensão <strong>não lê, armazena ou transmite o conteúdo de mensagens</strong></li>
+<li>A Extensão <strong>não envia mensagens automaticamente</strong></li>
+<li>A Extensão <strong>não captura áudio, vídeo, imagens ou outros arquivos de mídia</strong></li>
+<li>A Extensão <strong>não coleta a lista de contatos</strong> do Usuário</li>
+<li>A Extensão <strong>não vende dados a terceiros</strong></li>
+</ul>
+
+<h2>Consentimento do usuário</h2>
+
+<p>Na primeira abertura, a Extensão apresenta ao Usuário uma tela de aceite com dois checkboxes obrigatórios:</p>
+<ol>
+<li>Aceite dos <a href="https://www.tribocrm.com.br/legal/extensao-termos.html">Termos de Uso da Extensão</a></li>
+<li>Consentimento com a <a href="https://www.tribocrm.com.br/legal/extensao-privacidade.html">Política de Privacidade da Extensão</a> (conforme LGPD)</li>
+</ol>
+
+<p>A Extensão <strong>não funciona</strong> até que ambos os aceites sejam dados expressamente. O aceite é registrado localmente com a versão dos termos vigente. Alterações relevantes nos termos disparam novo aceite.</p>
+
+<h2>Contato</h2>
+
+<p><strong>Desenvolvedor:</strong> Única Soluções Financeiras e Educacionais Eireli<br>
+<strong>CNPJ:</strong> 32.285.015/0001-30<br>
+<strong>Endereço:</strong> Rua Adolfo de Matos, 48, ap 01, Bairro Manoel Ribeiro Sobrinho, Caratinga-MG, CEP 35300-168<br>
+<strong>E-mail de suporte:</strong> <a href="mailto:suporte@tribocrm.com.br">suporte@tribocrm.com.br</a><br>
+<strong>E-mail de privacidade:</strong> <a href="mailto:privacidade@tribocrm.com.br">privacidade@tribocrm.com.br</a></p>
+
+<p class="meta">Última atualização: Abril de 2026</p>
+
+<hr>
+
+<p class="footer-back"><a href="https://www.tribocrm.com.br/">← Voltar ao site</a></p>
+
+</body>
+</html>

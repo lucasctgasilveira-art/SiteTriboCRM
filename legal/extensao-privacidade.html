@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade — Extensão TriboCRM</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; max-width: 780px; margin: 40px auto; padding: 0 20px; color: #222; line-height: 1.65; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  h2 { font-size: 20px; margin-top: 36px; color: #111; }
+  h3 { font-size: 16px; margin-top: 24px; color: #333; }
+  .badge { display: inline-block; background: #f1f3f7; color: #666; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin-bottom: 12px; }
+  .meta { color: #666; font-size: 14px; margin-bottom: 28px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e5e5e5; vertical-align: top; }
+  th { background: #fafafa; font-weight: 600; }
+  a { color: #f97316; }
+  .note { background: #fff7ed; border-left: 3px solid #f97316; padding: 12px 16px; margin: 20px 0; font-size: 14px; }
+  .warning { background: #fef2f2; border-left: 3px solid #dc2626; padding: 12px 16px; margin: 20px 0; font-size: 14px; }
+  hr { border: none; border-top: 1px solid #e5e5e5; margin: 40px 0 20px; }
+  .footer-back { font-size: 14px; }
+  code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="badge">Documento Legal</div>
+
+<h1>Política de Privacidade — Extensão TriboCRM para WhatsApp Web</h1>
+<p class="meta">📅 Versão 1.0 · Abril de 2026</p>
+
+<p>Esta Política de Privacidade descreve como a <strong>Extensão TriboCRM para WhatsApp Web</strong> (doravante "Extensão"), operada pela <strong>Única Soluções Financeiras e Educacionais Eireli</strong> (CNPJ <strong>32.285.015/0001-30</strong>), coleta, usa e protege dados pessoais.</p>
+
+<div class="note">
+<strong>Este documento é complementar</strong> à <a href="https://www.tribocrm.com.br/legal/privacidade.html">Política de Privacidade do TriboCRM</a>. Para questões gerais sobre tratamento de dados (retenção, subprocessadores, direitos do titular, contato com DPO), consulte o documento principal. Este documento trata exclusivamente do que acontece dentro da Extensão.
+</div>
+
+<h2>1. Visão geral da coleta</h2>
+
+<p>A Extensão é projetada para coletar o <strong>mínimo possível</strong> de dados. Nosso princípio é: só coletamos o que é estritamente necessário para que o Usuário consiga vincular uma conversa do WhatsApp Web a um lead no TriboCRM.</p>
+
+<p>Especificamente, a Extensão processa três categorias de informação:</p>
+<ol>
+<li>Dados de autenticação do Usuário no TriboCRM</li>
+<li>Dados do Contato da conversa ativa no WhatsApp Web</li>
+<li>Preferências de uso da Extensão (tema, estado do painel)</li>
+</ol>
+
+<p>Nenhuma outra informação é lida, armazenada ou transmitida.</p>
+
+<h2>2. Dados que coletamos</h2>
+
+<h3>2.1 Dados de autenticação do Usuário</h3>
+
+<table>
+<tr><th>Dado</th><th>Como é coletado</th><th>Onde fica armazenado</th></tr>
+<tr>
+<td>E-mail do Usuário no TriboCRM</td>
+<td>Inserido pelo Usuário na tela de login da Extensão</td>
+<td>Enviado ao backend do TriboCRM para autenticação. Não é armazenado localmente.</td>
+</tr>
+<tr>
+<td>Senha</td>
+<td>Inserida pelo Usuário na tela de login da Extensão</td>
+<td>Enviada ao backend via HTTPS, nunca armazenada em texto plano. A Extensão não guarda a senha em nenhum lugar local.</td>
+</tr>
+<tr>
+<td>Token de acesso (JWT)</td>
+<td>Recebido do backend após login bem-sucedido</td>
+<td>Armazenado em <code>chrome.storage.local</code> no navegador do Usuário. Criptografado pelo Chrome. Usado para autenticar chamadas subsequentes.</td>
+</tr>
+</table>
+
+<h3>2.2 Dados do Contato da conversa ativa</h3>
+
+<table>
+<tr><th>Dado</th><th>Como é coletado</th><th>Onde vai</th></tr>
+<tr>
+<td>Nome exibido</td>
+<td>Lido do DOM da página do WhatsApp Web (apenas o cabeçalho da conversa ativa no momento)</td>
+<td>Usado apenas localmente no painel para exibir o contato. Não é enviado ao backend até que o Usuário clique em registrar interação ou criar lead.</td>
+</tr>
+<tr>
+<td>Número de telefone (quando disponível no DOM)</td>
+<td>Extraído de atributos HTML do WhatsApp Web (apenas quando o próprio WhatsApp expõe o número na página — geralmente para contatos não salvos na agenda)</td>
+<td>Enviado ao backend do TriboCRM apenas para buscar se o contato já é um lead cadastrado.</td>
+</tr>
+<tr>
+<td>Número de telefone (digitado manualmente)</td>
+<td>Inserido pelo Usuário no campo do painel quando o WhatsApp não expõe o número automaticamente</td>
+<td>Enviado ao backend do TriboCRM apenas para buscar se o contato já é um lead cadastrado.</td>
+</tr>
+</table>
+
+<h3>2.3 Preferências locais da Extensão</h3>
+
+<table>
+<tr><th>Dado</th><th>Finalidade</th><th>Armazenamento</th></tr>
+<tr>
+<td>Tema (claro/escuro)</td>
+<td>Lembrar preferência visual do Usuário</td>
+<td><code>chrome.storage.local</code> — nunca sai do navegador</td>
+</tr>
+<tr>
+<td>Estado do painel (aberto/fechado)</td>
+<td>Abrir o painel no estado que o Usuário deixou da última vez</td>
+<td><code>chrome.storage.local</code> — nunca sai do navegador</td>
+</tr>
+<tr>
+<td>Versão do aceite de termos</td>
+<td>Registrar que o Usuário aceitou esta Política de Privacidade e os Termos de Uso da Extensão</td>
+<td><code>chrome.storage.local</code> — nunca sai do navegador</td>
+</tr>
+</table>
+
+<h2>3. Dados que NÃO coletamos</h2>
+
+<div class="warning">
+<strong>Declaração expressa de não coleta.</strong> A Extensão foi projetada para NÃO coletar os seguintes dados, mesmo estando tecnicamente acessíveis dentro da página do WhatsApp Web:
+</div>
+
+<ul>
+<li><strong>Conteúdo das mensagens</strong> — texto, emojis, áudios, vídeos, imagens, documentos, stickers, figurinhas ou qualquer mídia trocada em qualquer conversa</li>
+<li><strong>Histórico de conversas</strong> — mensagens passadas de qualquer contato</li>
+<li><strong>Lista de contatos do WhatsApp</strong> — apenas o contato da conversa ativa no momento é processado, e isso se dá unicamente em resposta à interação do Usuário</li>
+<li><strong>Lista de grupos ou participantes de grupos</strong></li>
+<li><strong>Fotos de perfil, status ou informações pessoais</strong> dos contatos</li>
+<li><strong>Metadados de mensagens</strong> — horários, status de leitura, indicadores de digitação</li>
+<li><strong>Dados de outras abas do navegador</strong> — a Extensão só opera em <code>web.whatsapp.com</code></li>
+<li><strong>Dados de navegação fora do WhatsApp Web</strong> — histórico, cookies de outros sites, downloads</li>
+<li><strong>Informações biométricas ou dados sensíveis</strong> conforme definidos pela LGPD</li>
+</ul>
+
+<h2>4. Base legal do tratamento (LGPD)</h2>
+
+<table>
+<tr><th>Dado</th><th>Base legal</th></tr>
+<tr>
+<td>Autenticação do Usuário</td>
+<td>Execução de contrato (art. 7º, V da LGPD)</td>
+</tr>
+<tr>
+<td>Dados do Contato ativo</td>
+<td>Execução de contrato (art. 7º, V) — necessário para a funcionalidade contratada pelo Usuário</td>
+</tr>
+<tr>
+<td>Preferências locais</td>
+<td>Legítimo interesse (art. 7º, IX) — melhorar a experiência de uso</td>
+</tr>
+<tr>
+<td>Aceite de termos</td>
+<td>Consentimento (art. 7º, I) — obtido na primeira abertura da Extensão</td>
+</tr>
+</table>
+
+<h2>5. Como a Extensão trata os dados</h2>
+
+<ul>
+<li><strong>Comunicação com o backend</strong> é sempre feita por HTTPS (TLS 1.3)</li>
+<li><strong>Token JWT</strong> fica armazenado no <code>chrome.storage.local</code>, área isolada por extensão, acessível apenas pelo próprio código da Extensão</li>
+<li><strong>Nenhum dado trafega para servidores de terceiros</strong> além dos já declarados na Política de Privacidade principal do TriboCRM</li>
+<li><strong>Nenhum dado é vendido</strong> ou compartilhado com terceiros para fins de marketing</li>
+<li><strong>Logs do console</strong> da Extensão ficam apenas no navegador do Usuário e não são enviados a nenhum serviço</li>
+</ul>
+
+<h2>6. Compartilhamento com terceiros</h2>
+
+<p>A Extensão <strong>não compartilha dados com nenhum terceiro diretamente</strong>. Toda a comunicação ocorre entre:</p>
+
+<ul>
+<li>O navegador do Usuário (onde a Extensão roda)</li>
+<li>O backend do TriboCRM (api.tribocrm.com.br)</li>
+</ul>
+
+<p>Os subprocessadores do TriboCRM (Supabase, Vercel, Railway, etc.) são declarados na <a href="https://www.tribocrm.com.br/legal/privacidade.html">Política de Privacidade principal</a> e se aplicam à Extensão da mesma forma.</p>
+
+<p>Importante: a Meta Platforms (operadora do WhatsApp) <strong>não recebe dados nossos</strong>. Nós apenas lemos dados que o próprio WhatsApp Web já exibe no navegador do Usuário.</p>
+
+<h2>7. Armazenamento local</h2>
+
+<p>A Extensão usa a API <code>chrome.storage.local</code> para guardar:</p>
+
+<table>
+<tr><th>Chave</th><th>Conteúdo</th><th>Tempo de retenção</th></tr>
+<tr>
+<td><code>authToken</code></td>
+<td>Token JWT de autenticação</td>
+<td>Até o logout ou desinstalação</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td>Preferência de tema (claro/escuro)</td>
+<td>Até o Usuário alterar ou desinstalar</td>
+</tr>
+<tr>
+<td><code>panelOpen</code></td>
+<td>Estado do painel (aberto/fechado)</td>
+<td>Até o Usuário alterar ou desinstalar</td>
+</tr>
+<tr>
+<td><code>onboardingAcceptedVersion</code></td>
+<td>Versão dos termos que foram aceitos</td>
+<td>Até nova versão dos termos ou desinstalação</td>
+</tr>
+</table>
+
+<p>Ao desinstalar a Extensão, todo o armazenamento local é automaticamente apagado pelo Google Chrome.</p>
+
+<h2>8. Direitos do titular</h2>
+
+<p>Os Usuários da Extensão têm os mesmos direitos previstos na <a href="https://www.tribocrm.com.br/legal/privacidade.html#secao-10">Política de Privacidade principal</a>, incluindo acesso, correção, exclusão, portabilidade, revogação do consentimento e informação sobre compartilhamento.</p>
+
+<p>Para exercer qualquer direito em relação aos dados processados pela Extensão:</p>
+<p><strong>E-mail:</strong> <a href="mailto:privacidade@tribocrm.com.br">privacidade@tribocrm.com.br</a><br>
+<strong>Assunto sugerido:</strong> "Solicitação LGPD — Extensão Chrome"</p>
+
+<h2>9. Manipulação do conteúdo do WhatsApp Web</h2>
+
+<p>Para cumprir sua função, a Extensão modifica visualmente a página <code>web.whatsapp.com</code> exibida no navegador do Usuário, injetando um painel lateral e ajustando o layout. Isso ocorre apenas no navegador do próprio Usuário e:</p>
+
+<ul>
+<li>Não altera os dados que o WhatsApp exibe ao Usuário</li>
+<li>Não altera os dados que o Usuário envia ou recebe pelo WhatsApp</li>
+<li>Não é visível para os Contatos</li>
+<li>Desaparece ao desinstalar a Extensão ou recarregar a página sem ela</li>
+</ul>
+
+<p>A Meta Platforms (WhatsApp) não tem relação, endosso ou conhecimento da Extensão.</p>
+
+<h2>10. Responsabilidade do Usuário como Controlador</h2>
+
+<p>Quando o Usuário registra dados de Contatos no TriboCRM através da Extensão, ele atua como <strong>Controlador</strong> desses dados pessoais nos termos da LGPD. A Única Soluções Financeiras e Educacionais Eireli atua como <strong>Operadora</strong>.</p>
+
+<p>Isso significa que cabe ao Usuário:</p>
+<ul>
+<li>Ter base legal adequada para coletar e tratar os dados dos seus Contatos</li>
+<li>Informar os Contatos sobre o tratamento (quando aplicável)</li>
+<li>Atender aos pedidos dos Contatos relacionados aos seus direitos como titulares</li>
+</ul>
+
+<p>Detalhes das obrigações mútuas estão no <a href="https://www.tribocrm.com.br/legal/dpa.html">DPA LGPD</a>.</p>
+
+<h2>11. Crianças e adolescentes</h2>
+
+<p>A Extensão é destinada exclusivamente a uso profissional por pessoas maiores de 18 anos. Não coletamos intencionalmente dados de menores. Caso um Usuário acredite que dados de menores foram registrados indevidamente, pedimos contato imediato em <a href="mailto:privacidade@tribocrm.com.br">privacidade@tribocrm.com.br</a>.</p>
+
+<h2>12. Incidentes de segurança</h2>
+
+<p>Em caso de incidente de segurança que afete dados pessoais tratados pela Extensão, seguiremos o mesmo protocolo da Política principal: notificação aos titulares afetados e à ANPD em até <strong>72 horas</strong> após a confirmação do incidente.</p>
+
+<h2>13. Alterações nesta Política</h2>
+
+<p>Alterações relevantes serão comunicadas por e-mail e dentro da própria Extensão, com <strong>reaceite obrigatório</strong> no painel antes de qualquer uso continuado. A versão aceita fica registrada no armazenamento local.</p>
+
+<h2>14. Contato</h2>
+
+<p><strong>Encarregado de Proteção de Dados (DPO):</strong> <a href="mailto:privacidade@tribocrm.com.br">privacidade@tribocrm.com.br</a><br>
+<strong>Contato jurídico:</strong> <a href="mailto:juridico@tribocrm.com.br">juridico@tribocrm.com.br</a><br>
+<strong>Endereço:</strong> Rua Adolfo de Matos, 48, ap 01, Bairro Manoel Ribeiro Sobrinho, Caratinga-MG, CEP 35300-168</p>
+
+<p class="meta">Última atualização: Abril de 2026</p>
+
+<hr>
+
+<p class="footer-back"><a href="https://www.tribocrm.com.br/">← Voltar ao site</a></p>
+
+</body>
+</html>
