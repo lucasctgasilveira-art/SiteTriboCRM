@@ -1168,6 +1168,48 @@
   .footer-inner {
     max-width: 1100px;
     margin: 0 auto;
+  }
+
+  /* Linha de destaque com 2 CTAs principais */
+  .footer-cta-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .footer-cta-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .footer-cta-btn--primary {
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+  }
+  .footer-cta-btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .footer-cta-btn--ghost {
+    background: transparent;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+  }
+  .footer-cta-btn--ghost:hover { color: var(--text); border-color: var(--accent); }
+
+  /* Separador horizontal */
+  .footer-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+
+  /* Linha inferior: legais + copyright */
+  .footer-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1912,15 +1954,28 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <a href="#" class="logo"><span>Tribo</span><span>CRM</span></a>
-    <ul class="footer-links">
-      <li><a href="/legal/termos.html">Termos de Uso</a></li>
-      <li><a href="/legal/privacidade.html">Política de Privacidade</a></li>
-      <li><a href="/legal/dpa.html">DPA LGPD</a></li>
-      <li><a href="mailto:suporte@tribocrm.com.br">Suporte</a></li>
-      <li><a href="https://app.tribocrm.com.br">Entrar no sistema</a></li>
-    </ul>
-    <div class="footer-copy">© 2026 TriboCRM · Única Soluções Financeiras e Educacionais Eireli</div>
+    <!-- Linha de destaque: dois CTAs principais -->
+    <div class="footer-cta-row">
+      <a href="/parceiros.html" class="footer-cta-btn footer-cta-btn--primary">
+        🤝 Agência parceira
+      </a>
+      <a href="https://app.tribocrm.com.br" class="footer-cta-btn footer-cta-btn--ghost">
+        Entrar no sistema →
+      </a>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- Linha inferior: legais + copyright -->
+    <div class="footer-meta">
+      <ul class="footer-links">
+        <li><a href="/legal/termos.html">Termos de Uso</a></li>
+        <li><a href="/legal/privacidade.html">Política de Privacidade</a></li>
+        <li><a href="/legal/dpa.html">DPA LGPD</a></li>
+        <li><a href="mailto:suporte@tribocrm.com.br">Suporte</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 TriboCRM · Única Soluções Financeiras e Educacionais Eireli</div>
+    </div>
   </div>
 </footer>
 

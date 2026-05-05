@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="apple-touch-icon" sizes="192x192" href="/favicon-192x192.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa de Parceria — TriboCRM</title>
+<meta name="description" content="Indique o TriboCRM e ganhe comissão recorrente de até 25% enquanto seu cliente pagar. Programa de parceria para agências, contadores e consultores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0b0f;
+    --surface: #111318;
+    --card: #161a22;
+    --card-hover: #1c2130;
+    --border: #22283a;
+    --accent: #f97316;
+    --accent-hover: #fb923c;
+    --accent-10: rgba(249,115,22,0.10);
+    --accent-20: rgba(249,115,22,0.20);
+    --text: #e8eaf0;
+    --text-2: #9ca3af;
+    --text-3: #6b7280;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.10);
+    --blue: #3b82f6;
+  }
+
+  html[data-theme="light"] {
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f1f3f8;
+    --border: #e2e5ed;
+    --text: #0f1117;
+    --text-2: #4b5563;
+    --text-3: #6b7280;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,11,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  html[data-theme="light"] nav {
+    background: rgba(255,247,240,0.95);
+    border-bottom: 1px solid #fde8d5;
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+  }
+  .logo {
+    font-size: 20px; font-weight: 800;
+    text-decoration: none; color: var(--text);
+  }
+  .logo span:last-child { color: var(--accent); }
+
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  .theme-toggle {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-2); border-radius: 8px;
+    width: 36px; height: 36px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+
+  .btn-back {
+    color: var(--text-2); text-decoration: none; font-size: 13px;
+    padding: 8px 14px; border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .btn-back:hover { color: var(--accent); background: var(--card); }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 100px 0 80px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, var(--accent-10) 0%, transparent 60%),
+      var(--bg);
+  }
+  .badge {
+    display: inline-block;
+    background: var(--accent-10);
+    color: var(--accent);
+    border: 1px solid var(--accent-20);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero .subtitle {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-2);
+    max-width: 720px;
+    margin: 0 auto 36px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent);
+    color: #fff !important;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 15px; font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+    border: none; cursor: pointer;
+    font-family: inherit;
+  }
+  .hero-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .hero-secondary {
+    margin-left: 8px;
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 16px;
+  }
+  .hero-secondary:hover { color: var(--accent); }
+
+  /* ── Section base ── */
+  section {
+    padding: 80px 0;
+  }
+  .section-eyebrow {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .section-title em { color: var(--accent); font-style: normal; }
+  .section-lead {
+    font-size: 16px;
+    color: var(--text-2);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  /* ── Calculadora ── */
+  .calc-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .calc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (max-width: 720px) {
+    .calc { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+  }
+  .calc-controls { display: flex; flex-direction: column; gap: 24px; }
+  .calc-field label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 13px; color: var(--text-2);
+    margin-bottom: 8px;
+  }
+  .calc-field label strong {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .calc-field input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none; appearance: none;
+    background: var(--border);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  .calc-field input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .calc-field input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .calc-result {
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent-10), transparent);
+    border: 1px solid var(--accent-20);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .calc-result-label {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-bottom: 8px;
+  }
+  .calc-result-value {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .calc-result-period {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-top: 4px;
+  }
+  .calc-result-extra {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    line-height: 1.5;
+  }
+  .calc-disclaimer {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 16px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── Como funciona ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .step:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .step-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    background: var(--accent-10);
+    color: var(--accent);
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  .step h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .step p {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  /* ── Diferenciais ── */
+  .reasons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 720px) { .reasons { grid-template-columns: 1fr; } }
+  .reason {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex; gap: 14px;
+    align-items: flex-start;
+  }
+  .reason-icon {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    background: var(--accent-10);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .reason h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .reason p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+  /* ── Para quem ── */
+  .perfis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 720px) { .perfis { grid-template-columns: 1fr; } }
+  .perfil {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .perfil-emoji {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+  .perfil h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .perfil p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+  /* ── O que divulga (TriboCRM) ── */
+  .product-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .product-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  @media (max-width: 720px) { .product-grid { grid-template-columns: 1fr; } }
+  .product-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .product-item-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .product-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .product-item p { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+  /* ── FAQ ── */
+  .faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .faq-item:hover { border-color: var(--accent); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; font-weight: 600;
+    user-select: none;
+  }
+  .faq-toggle {
+    font-size: 20px;
+    color: var(--accent);
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, padding-top 0.25s ease;
+  }
+  .faq-item.open .faq-a {
+    max-height: 500px;
+    padding-top: 14px;
+  }
+
+  /* ── CTA final ── */
+  .cta-final {
+    background:
+      radial-gradient(ellipse 50% 80% at 50% 100%, var(--accent-10) 0%, transparent 60%),
+      var(--bg);
+    text-align: center;
+    padding: 100px 0;
+  }
+  .cta-final h2 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .cta-final h2 em { color: var(--accent); font-style: normal; }
+  .cta-final p {
+    font-size: 16px;
+    color: var(--text-2);
+    margin-bottom: 32px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 24px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 18px;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .footer-links a {
+    color: var(--text-3);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-2); }
+  .footer-copy {
+    color: var(--text-3);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* ── WhatsApp flutuante ── */
+  .wa-fab {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    width: 56px; height: 56px;
+    background: #25d366;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 90;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-fab:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(37,211,102,0.5); }
+  .wa-fab svg { width: 28px; height: 28px; fill: #fff; }
+</style>
+</head>
+<body>
+
+<!-- ────────────────────────────── NAV ────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo"><span>Tribo</span><span>CRM</span></a>
+    <div class="nav-actions">
+      <a href="/" class="btn-back">← Voltar pra home</a>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Alternar tema">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ────────────────────────────── HERO ────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <span class="badge">Programa de Parceria</span>
+    <h1>Indique. Receba. <em>Sempre.</em></h1>
+    <p class="subtitle">
+      Comissão recorrente de <strong style="color:var(--text);">até 25%</strong> enquanto seu cliente pagar. Indicou, virou cliente, você ganha mês após mês — sem teto, sem prazo de validade.
+    </p>
+    <button class="hero-cta" onclick="contactWhatsApp('hero')">
+      Quero ser parceiro →
+    </button>
+    <a href="#como-funciona" class="hero-secondary">ou veja como funciona ↓</a>
+  </div>
+</section>
+
+<!-- ────────────────────────────── CALCULADORA ────────────────────────────── -->
+<section class="calc-section">
+  <div class="container">
+    <div class="section-eyebrow">Quanto você ganha</div>
+    <h2 class="section-title">Faça as contas com seus <em>números</em>.</h2>
+    <p class="section-lead">
+      Mexa nos campos abaixo e veja quanto receberia todo mês com a sua base de clientes indicados.
+    </p>
+
+    <div class="calc">
+      <div class="calc-controls">
+        <div class="calc-field">
+          <label>
+            <span>Clientes indicados ativos</span>
+            <strong id="clientes-label">10</strong>
+          </label>
+          <input type="range" id="clientes" min="1" max="100" value="10" oninput="recalc()">
+        </div>
+
+        <div class="calc-field">
+          <label>
+            <span>Mensalidade média do cliente</span>
+            <strong id="ticket-label">R$ 297</strong>
+          </label>
+          <input type="range" id="ticket" min="97" max="997" step="10" value="297" oninput="recalc()">
+        </div>
+
+        <div class="calc-field">
+          <label>
+            <span>Sua faixa de comissão</span>
+            <strong id="rate-label">20%</strong>
+          </label>
+          <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <button type="button" class="rate-btn" data-rate="15" onclick="setRate(15)">15%</button>
+            <button type="button" class="rate-btn active" data-rate="20" onclick="setRate(20)">20%</button>
+            <button type="button" class="rate-btn" data-rate="25" onclick="setRate(25)">25%</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-result">
+        <div class="calc-result-label">Você recebe</div>
+        <div class="calc-result-value" id="result">R$ 594</div>
+        <div class="calc-result-period">por mês — todo mês</div>
+        <div class="calc-result-extra">
+          Em <strong id="annual-clients">10</strong> clientes durante 12 meses, isso vira <strong id="annual" style="color:var(--accent);">R$ 7.128</strong> no ano.
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-disclaimer">
+      Os valores acima são apenas projeções matemáticas com os números que você inseriu — não são promessas de ganho. Comissão real depende de quem você indica e do plano que cada cliente contrata.
+    </div>
+  </div>
+</section>
+
+<style>
+  .rate-btn {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .rate-btn:hover { border-color: var(--accent); color: var(--text); }
+  .rate-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+</style>
+
+<!-- ────────────────────────────── COMO FUNCIONA ────────────────────────────── -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="section-eyebrow">Como funciona</div>
+    <h2 class="section-title">4 passos. <em>Simples assim.</em></h2>
+    <p class="section-lead">
+      Sem burocracia, sem letra miúda. Você indica, o cliente assina, você recebe.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Você se cadastra</h3>
+        <p>A gente conversa, alinha valores e te entrega seu código exclusivo de parceiro.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Divulga seu link</h3>
+        <p>Você compartilha um link único com seus contatos: redes, WhatsApp, e-mail, site.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Cliente contrata</h3>
+        <p>Quem chega pelo seu link vira indicação. Sem complicação pra você nem pra ele.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Você recebe</h3>
+        <p>Toda mensalidade que o cliente paga, uma fatia vai pra você. Mês após mês.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────── POR QUE VALE A PENA ────────────────────────────── -->
+<section style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-eyebrow">Por que vale a pena</div>
+    <h2 class="section-title">Mais que indicação. <em>Renda recorrente.</em></h2>
+    <p class="section-lead">
+      A maioria dos programas de afiliado paga 1 vez e some. Aqui você recebe enquanto o cliente estiver no sistema.
+    </p>
+
+    <div class="reasons">
+      <div class="reason">
+        <div class="reason-icon">♾️</div>
+        <div>
+          <h3>Comissão vitalícia</h3>
+          <p>Enquanto o cliente pagar, você recebe. Sem prazo de 12 meses, sem corte arbitrário.</p>
+        </div>
+      </div>
+      <div class="reason">
+        <div class="reason-icon">📈</div>
+        <div>
+          <h3>Faixas que crescem com você</h3>
+          <p>Quanto mais clientes ativos, maior sua %. Pode chegar até 25% recorrente.</p>
+        </div>
+      </div>
+      <div class="reason">
+        <div class="reason-icon">📊</div>
+        <div>
+          <h3>Relatório transparente</h3>
+          <p>Cada mês você recebe a relação detalhada: cliente, valor pago, sua comissão, quando cai na conta.</p>
+        </div>
+      </div>
+      <div class="reason">
+        <div class="reason-icon">⚡</div>
+        <div>
+          <h3>Sem teto, sem mensalidade</h3>
+          <p>Não cobramos pra você ser parceiro. Indicou 1 ou 100, é tudo seu — sem desconto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────── PARA QUEM ────────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">Para quem é</div>
+    <h2 class="section-title">Você atende empresas? <em>Esse programa é seu.</em></h2>
+    <p class="section-lead">
+      Se você já tem relação com pequenas e médias empresas, indicar o TriboCRM é uma renda extra natural.
+    </p>
+
+    <div class="perfis">
+      <div class="perfil">
+        <div class="perfil-emoji">🎯</div>
+        <h3>Agências de marketing</h3>
+        <p>Você cuida das campanhas dos seus clientes. Indicar um CRM bom fecha o ciclo: lead que entra precisa virar venda.</p>
+      </div>
+      <div class="perfil">
+        <div class="perfil-emoji">📒</div>
+        <h3>Contadores e BPO</h3>
+        <p>Sua carteira é PME. Você já é o "primeiro consultor" do empresário — recomendar o CRM certo é continuar entregando valor.</p>
+      </div>
+      <div class="perfil">
+        <div class="perfil-emoji">🤝</div>
+        <h3>Consultores de vendas</h3>
+        <p>Seu trabalho é organizar a operação comercial dos clientes. O TriboCRM é a ferramenta que sustenta tudo o que você ensina.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────── O QUE VOCÊ DIVULGA ────────────────────────────── -->
+<section class="product-section">
+  <div class="container">
+    <div class="section-eyebrow">O que você divulga</div>
+    <h2 class="section-title">Um CRM <em>feito pra PME brasileira</em>.</h2>
+    <p class="section-lead">
+      Quando você indica, está oferecendo algo que resolve dor real. Por isso fecha mais fácil.
+    </p>
+
+    <div class="product-grid">
+      <div class="product-item">
+        <div class="product-item-label">Pipeline visual</div>
+        <h4>Kanban que faz sentido</h4>
+        <p>Lead entra, vira proposta, vira venda. Sem campos infinitos pra preencher.</p>
+      </div>
+      <div class="product-item">
+        <div class="product-item-label">Extensão Chrome</div>
+        <h4>Vincula direto do WhatsApp</h4>
+        <p>Vendedor abre uma conversa, o painel do lead aparece do lado. Sem alt+tab.</p>
+      </div>
+      <div class="product-item">
+        <div class="product-item-label">Automações</div>
+        <h4>Tarefas e mensagens no piloto</h4>
+        <p>Lead caiu? Cria tarefa, manda WhatsApp, agenda follow-up — tudo automático.</p>
+      </div>
+      <div class="product-item">
+        <div class="product-item-label">Multiusuário</div>
+        <h4>Equipe inteira no mesmo lugar</h4>
+        <p>Vendedores, líderes, gestor, dono. Cada um vê o que precisa, sem bagunça.</p>
+      </div>
+      <div class="product-item">
+        <div class="product-item-label">Metas</div>
+        <h4>Bate quem é cobrado</h4>
+        <p>Define meta por vendedor, por equipe, por mês. Dashboard mostra quem tá perto e quem tá longe.</p>
+      </div>
+      <div class="product-item">
+        <div class="product-item-label">API + Webhooks</div>
+        <h4>Conecta com tudo</h4>
+        <p>Integra com formulário, RD, Mailchimp, ferramenta interna do cliente. Lead vem de qualquer lugar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────── FAQ ────────────────────────────── -->
+<section>
+  <div class="container">
+    <div class="section-eyebrow">Perguntas frequentes</div>
+    <h2 class="section-title">Tira a sua <em>dúvida</em>.</h2>
+
+    <div style="max-width: 760px; margin-top: 30px;">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>Quando eu recebo a comissão?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          A cada mensalidade paga pelo cliente, geramos sua comissão automaticamente. Tem 30 dias de carência (proteção contra reembolso) — depois disso ela fica disponível pra pagamento. O acerto é mensal, por PIX, na chave que você cadastrou.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>E se o cliente cancelar?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Se cancelar nos primeiros 30 dias (dentro da carência), aquela comissão é estornada — mas é raro. Se cancelar depois, a comissão dos meses já pagos fica com você. Só não geramos novas a partir do cancelamento.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>Como funciona a faixa de até 25%?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Você começa com uma % que combinamos no contrato. Conforme aumenta o número de clientes ativos indicados por você, a faixa sobe. O sistema calcula automaticamente — não precisa pedir promoção. Os critérios exatos são definidos quando você se cadastra como parceiro.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>Preciso ter empresa pra ser parceiro?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          O ideal é ter CNPJ pra emitir nota fiscal da comissão (boa prática contábil). Mas pessoa física também pode — só conversamos sobre o formato durante o cadastro.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>Tem alguma exclusividade?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Nenhuma. Você pode trabalhar com outros softwares ao mesmo tempo. A gente acredita que se o TriboCRM for o melhor pro cliente, você vai indicar de qualquer jeito. Se não for, não força.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>O cliente pode trocar de parceiro depois?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Pode. Se o cliente decidir trocar, a comissão das mensalidades antigas fica com você (já recebeu). As próximas vão pro novo parceiro. É justo: parceiro recebe enquanto presta apoio.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">
+          <span>Como começo?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Clica em "Quero ser parceiro" no botão verde do WhatsApp aqui na página. A gente conversa, alinha tudo, e em até 48h você está com seu código pra começar a divulgar.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────── CTA FINAL ────────────────────────────── -->
+<section class="cta-final">
+  <div class="container">
+    <h2>Pronto pra <em>começar a indicar?</em></h2>
+    <p>Fale com a gente no WhatsApp. Em até 48h você está cadastrado e com seu código em mãos.</p>
+    <button class="hero-cta" onclick="contactWhatsApp('cta_final')">
+      Quero ser parceiro →
+    </button>
+  </div>
+</section>
+
+<!-- ────────────────────────────── FOOTER ────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <a href="/" class="logo"><span>Tribo</span><span>CRM</span></a>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/legal/termos.html">Termos de Uso</a></li>
+      <li><a href="/legal/privacidade.html">Privacidade</a></li>
+      <li><a href="mailto:suporte@tribocrm.com.br">Suporte</a></li>
+      <li><a href="https://app.tribocrm.com.br">Entrar no sistema</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 TriboCRM · Única Soluções Financeiras e Educacionais Eireli</div>
+  </div>
+</footer>
+
+<!-- ────────────────────────────── WHATSAPP FAB ────────────────────────────── -->
+<button class="wa-fab" onclick="contactWhatsApp('fab')" title="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</button>
+
+<!-- ────────────────────────────── SCRIPTS ────────────────────────────── -->
+<script>
+  // ── Tema ──
+  (function() {
+    var saved = localStorage.getItem('tribocrm-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('themeToggle');
+      if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
+    });
+  })();
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('tribocrm-theme', next);
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.textContent = next === 'light' ? '🌙' : '☀️';
+  }
+
+  // ── Calculadora ──
+  var currentRate = 20;
+
+  function recalc() {
+    var clientes = parseInt(document.getElementById('clientes').value, 10);
+    var ticket = parseInt(document.getElementById('ticket').value, 10);
+    var rate = currentRate;
+
+    var monthly = clientes * ticket * (rate / 100);
+    var annual = monthly * 12;
+
+    document.getElementById('clientes-label').textContent = clientes;
+    document.getElementById('ticket-label').textContent = 'R$ ' + ticket;
+    document.getElementById('rate-label').textContent = rate + '%';
+    document.getElementById('result').textContent = 'R$ ' +
+      monthly.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+    document.getElementById('annual').textContent = 'R$ ' +
+      annual.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+    document.getElementById('annual-clients').textContent = clientes;
+  }
+
+  function setRate(r) {
+    currentRate = r;
+    document.querySelectorAll('.rate-btn').forEach(function(btn) {
+      btn.classList.toggle('active', parseInt(btn.dataset.rate, 10) === r);
+    });
+    recalc();
+  }
+
+  // ── FAQ ──
+  function toggleFaq(item) {
+    item.classList.toggle('open');
+  }
+
+  // ── WhatsApp ──
+  function contactWhatsApp(origem) {
+    var msg = 'Olá! Tenho interesse em conhecer o programa de parceria do TriboCRM.';
+    var url = 'https://wa.me/5533991393031?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  }
+
+  // ── Inicializa calculadora ──
+  document.addEventListener('DOMContentLoaded', recalc);
+</script>
+
+</body>
+</html>
