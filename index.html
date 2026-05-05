@@ -2219,5 +2219,35 @@
   }
 </script>
 
+<!--
+  Programa de parceiros — captura código de afiliado vindo via ?ref=.
+  Salva em cookie 'tribocrm_ref' por 30 dias. SignupPage do app.tribocrm
+  lê esse cookie e envia opcionalmente como referralCode no POST de signup.
+  Last-touch: cookie sempre sobrescrito por novo ?ref= (usuário clicou
+  link mais recente vence).
+-->
+<script>
+  (function() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var ref = params.get('ref');
+      if (ref) {
+        var clean = ref.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 30);
+        if (clean) {
+          var maxAge = 30 * 24 * 60 * 60; // 30 dias em segundos
+          var domain = location.hostname.endsWith('tribocrm.com.br')
+            ? '; domain=.tribocrm.com.br' // compartilha entre tribocrm.com.br, www, app
+            : '';
+          document.cookie = 'tribocrm_ref=' + encodeURIComponent(clean)
+            + '; max-age=' + maxAge
+            + '; path=/'
+            + domain
+            + '; samesite=lax';
+        }
+      }
+    } catch (e) { /* private mode pode bloquear — ignora */ }
+  })();
+</script>
+
 </body>
 </html>
