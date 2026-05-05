@@ -1012,12 +1012,51 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
   }
 
   // ── Lead Form Modal (botões "Quero ser parceiro") ──
-  // Abre popup com formulário do TriboCRM (embed.js). Quando user
-  // submete, detecta o estado de sucesso via MutationObserver e
-  // redireciona pro WhatsApp pra continuar a conversa.
-  var leadFormLoaded = false;
+  //
+  // Replica a lógica do embed.js do TriboCRM diretamente aqui pra
+  // ter controle total: abre popup com form vindo da API
+  // (/public/forms/:embedToken), submete pra API
+  // (/public/forms/:embedToken/submit), e DEPOIS do sucesso
+  // redireciona pro WhatsApp com mensagem pré-formatada.
+  //
+  // Por que não usar o <script src="...embed.js"> direto:
+  // ele depende de document.currentScript pra encontrar onde injetar
+  // o form, e isso retorna null quando o script é appendChild'd
+  // dinamicamente no DOM. Resultado: form não renderiza (bug visto
+  // em produção). Replicar a lógica aqui é robusto e independente.
+
+  var FORM_TOKEN = 'b9a6a16ebbbf44e09d0625e6';
+  var API_BASE = 'https://api.tribocrm.com.br';
+  var leadFormConfig = null;
+  var leadFormLoading = false;
   var leadOrigem = '';
-  var leadSuccessObserver = null;
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function maskPhoneBR(value) {
+    var d = String(value || '').replace(/\D/g, '').slice(0, 11);
+    if (d.length === 0) return '';
+    if (d.length <= 2) return '(' + d;
+    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+  }
+
+  function isPhoneField(f) {
+    var s = String((f && (f.name || f.label)) || '').toLowerCase();
+    return s.indexOf('telefone') !== -1 || s.indexOf('phone') !== -1 ||
+      s.indexOf('whatsapp') !== -1 || s.indexOf('celular') !== -1 || s.indexOf('tel') === 0;
+  }
+
+  function isEmailField(f) {
+    var s = String((f && (f.name || f.label)) || '').toLowerCase();
+    var t = String((f && f.type) || '').toLowerCase();
+    return t === 'email' || s.indexOf('email') !== -1 || s.indexOf('e-mail') !== -1;
+  }
 
   function openLeadForm(origem) {
     leadOrigem = origem || 'unknown';
@@ -1032,49 +1071,138 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
-    // Lazy-load do embed.js só na primeira abertura. Depois disso o
-    // form fica em cache no DOM e reabre instantaneamente.
-    if (!leadFormLoaded) {
-      var body = document.getElementById('leadModalBody');
-      var script = document.createElement('script');
-      script.src = 'https://api.tribocrm.com.br/public/embed.js';
-      script.setAttribute('data-form', 'b9a6a16ebbbf44e09d0625e6');
-      script.setAttribute('data-theme', 'dark');
-      body.appendChild(script);
-      leadFormLoaded = true;
-      startLeadSuccessWatcher();
-    }
-  }
-
-  function closeLeadForm() {
-    document.getElementById('leadOverlay').classList.remove('open');
-    document.getElementById('leadModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // Detecta quando o embed.js troca o conteúdo do container pra
-  // mostrar o estado de sucesso (ele renderiza um SVG check verde
-  // dentro do container [data-tribocrm-form]). Quando detecta, dispara
-  // Contact no Pixel e redireciona pro WhatsApp depois de 1.5s pro
-  // user ver a confirmação.
-  function startLeadSuccessWatcher() {
     var body = document.getElementById('leadModalBody');
-    if (!body || typeof MutationObserver === 'undefined') return;
 
-    leadSuccessObserver = new MutationObserver(function(mutations) {
-      // Procura por algum elemento dentro do body do modal cuja stroke
-      // do SVG seja a cor verde (#22c55e) — é o checkmark de sucesso
-      // que o embed.js injeta após submit OK.
-      var svgs = body.querySelectorAll('svg[stroke="#22c55e"]');
-      if (svgs.length > 0) {
-        leadSuccessObserver.disconnect();
-        onLeadSuccess();
-      }
-    });
-    leadSuccessObserver.observe(body, { childList: true, subtree: true });
+    // Já tem config carregada — só re-renderiza form limpo
+    if (leadFormConfig) {
+      renderLeadForm(body);
+      return;
+    }
+
+    // Primeira abertura: busca config do form na API e renderiza
+    if (leadFormLoading) return;
+    leadFormLoading = true;
+    body.innerHTML = '<div style="text-align:center;padding:32px 16px;color:var(--text-2);font-size:13px">Carregando...</div>';
+
+    fetch(API_BASE + '/public/forms/' + encodeURIComponent(FORM_TOKEN))
+      .then(function(r) { return r.json().then(function(j) { return { ok: r.ok, body: j }; }); })
+      .then(function(res) {
+        leadFormLoading = false;
+        if (!res.ok || !res.body || !res.body.success) {
+          body.innerHTML = '<div style="text-align:center;padding:32px 16px;color:#ef4444;font-size:13px">Não conseguimos carregar o formulário. Por favor, fale com a gente diretamente pelo WhatsApp.</div>';
+          return;
+        }
+        leadFormConfig = res.body.data;
+        renderLeadForm(body);
+      })
+      .catch(function() {
+        leadFormLoading = false;
+        body.innerHTML = '<div style="text-align:center;padding:32px 16px;color:#ef4444;font-size:13px">Falha de conexão. Por favor, tente novamente ou fale pelo WhatsApp.</div>';
+      });
   }
 
-  function onLeadSuccess() {
+  function renderLeadForm(container) {
+    var fields = Array.isArray(leadFormConfig.fieldsConfig) ? leadFormConfig.fieldsConfig : [];
+
+    var html = '<form id="lead-form" style="display:flex;flex-direction:column;gap:12px;padding:8px">';
+    fields.forEach(function(f, i) {
+      var label = f.label || f.name || ('Campo ' + (i + 1));
+      var name = f.name || f.label || ('field_' + i);
+      var required = f.required ? ' required' : '';
+      var asterisk = f.required ? ' *' : '';
+      var type = isEmailField(f) ? 'email' : (isPhoneField(f) ? 'tel' : 'text');
+      var attrs = isPhoneField(f) ? ' oninput="this.value=window.__maskPhoneBR(this.value)"' : '';
+
+      html += '<div>';
+      html += '<label style="display:block;font-size:12px;color:var(--text-2);margin-bottom:6px;font-weight:500">' + escapeHtml(label) + asterisk + '</label>';
+      html += '<input type="' + type + '" name="' + escapeHtml(name) + '"' + required + attrs +
+              ' style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;' +
+              'padding:10px 12px;font-size:13px;color:var(--text);outline:none;font-family:inherit;box-sizing:border-box" />';
+      html += '</div>';
+    });
+
+    html += '<div id="lead-form-error" style="display:none;color:#ef4444;font-size:12px;padding:8px 10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:6px"></div>';
+    html += '<button type="submit" id="lead-form-submit" style="background:var(--accent);color:#fff;border:none;border-radius:10px;' +
+            'padding:12px 16px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;transition:background 0.15s">' +
+            'Continuar no WhatsApp →</button>';
+    html += '</form>';
+
+    container.innerHTML = html;
+    window.__maskPhoneBR = maskPhoneBR;
+
+    var form = document.getElementById('lead-form');
+    form.addEventListener('submit', handleLeadSubmit);
+  }
+
+  function handleLeadSubmit(e) {
+    e.preventDefault();
+    var form = e.target;
+    var btn = document.getElementById('lead-form-submit');
+    var errBox = document.getElementById('lead-form-error');
+    errBox.style.display = 'none';
+
+    var inputs = form.querySelectorAll('input');
+    var payload = {};
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      if (input.required && !input.value.trim()) {
+        errBox.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+        errBox.style.display = 'block';
+        return;
+      }
+      if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+        errBox.textContent = 'Por favor, insira um e-mail válido.';
+        errBox.style.display = 'block';
+        return;
+      }
+      payload[input.name] = input.value;
+    }
+
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'wait';
+    btn.textContent = 'Enviando...';
+
+    fetch(API_BASE + '/public/forms/' + encodeURIComponent(FORM_TOKEN) + '/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then(function(r) { return r.json().then(function(j) { return { ok: r.ok, body: j }; }); })
+      .then(function(res) {
+        if (res.ok && res.body && res.body.success) {
+          showLeadSuccess();
+        } else {
+          var msg = (res.body && res.body.error && res.body.error.message) || 'Erro ao enviar. Tente novamente.';
+          errBox.textContent = msg;
+          errBox.style.display = 'block';
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          btn.style.cursor = 'pointer';
+          btn.textContent = 'Continuar no WhatsApp →';
+        }
+      })
+      .catch(function() {
+        errBox.textContent = 'Falha de conexão. Verifique sua internet e tente novamente.';
+        errBox.style.display = 'block';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.textContent = 'Continuar no WhatsApp →';
+      });
+  }
+
+  function showLeadSuccess() {
+    var body = document.getElementById('leadModalBody');
+    body.innerHTML =
+      '<div style="text-align:center;padding:32px 20px">' +
+      '<div style="width:56px;height:56px;border-radius:50%;background:rgba(34,197,94,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">' +
+      '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>' +
+      '</div>' +
+      '<div style="font-size:15px;color:var(--text);line-height:1.5;margin-bottom:8px;font-weight:600">Recebemos seus dados!</div>' +
+      '<div style="font-size:13px;color:var(--text-2);line-height:1.5">Te redirecionando pro WhatsApp em instantes...</div>' +
+      '</div>';
+
     if (typeof fbq === 'function') {
       fbq('track', 'Contact', { content_name: 'Parceiro Form Submit', content_category: leadOrigem });
     }
@@ -1082,14 +1210,16 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     var msg = 'Olá! Acabei de preencher o formulário no site e tenho interesse no programa de parceria do TriboCRM.';
     var url = 'https://wa.me/5533991393031?text=' + encodeURIComponent(msg);
 
-    // Pequeno delay pra usuário ver a confirmação de sucesso antes
-    // do redirect. Evita sensação de "sumiu sem feedback".
     setTimeout(function() {
       window.open(url, '_blank');
-      // Fecha o modal após abrir o WhatsApp em outra aba — usuário
-      // volta na aba do site e vê estado limpo.
       closeLeadForm();
     }, 1500);
+  }
+
+  function closeLeadForm() {
+    document.getElementById('leadOverlay').classList.remove('open');
+    document.getElementById('leadModal').classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   // Fecha modal ao apertar ESC (acessibilidade básica).

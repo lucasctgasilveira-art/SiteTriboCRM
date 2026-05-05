@@ -1323,7 +1323,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
   <div class="nav-cta">
     <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema" onclick="toggleTheme()">☀️</button>
     <a href="https://app.tribocrm.com.br" class="btn-ghost-sm">Entrar</a>
-    <a href="https://app.tribocrm.com.br/signup" class="btn-primary" onclick="trackSignupClick('nav')">Testar grátis →</a>
+    <a href="#" class="btn-primary" onclick="goSignup(event, 'pro', 'nav')">Testar grátis →</a>
   </div>
 </nav>
 
@@ -1342,7 +1342,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
   <p>Pipeline visual, WhatsApp integrado, automações inteligentes e a metodologia da Tribo de Vendas embutida. Tudo que você precisa para vender mais — sem complicar.</p>
 
   <div class="hero-cta">
-    <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg" onclick="trackSignupClick('hero')">
+    <a href="#" class="btn-primary btn-primary-lg" onclick="goSignup(event, 'pro', 'hero')">
       Começar grátis por 30 dias →
     </a>
     <a href="#funcionalidades" class="btn-outline-lg">
@@ -1823,7 +1823,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
           <li>1.000 leads ativos</li>
           <li>1 funil de vendas</li>
         </ul>
-        <a href="https://app.tribocrm.com.br/signup?plano=solo" class="plan-btn plan-btn-ghost" onclick="trackSignupClick('solo')">Assinar</a>
+        <a href="#" class="plan-btn plan-btn-ghost" onclick="goSignup(event, 'solo', 'card_solo')">Assinar</a>
       </div>
 
       <div class="plan-card" style="opacity:0.85;">
@@ -1961,7 +1961,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     <div class="reveal">
       <h2>Pronto para montar sua<br><em style="color:var(--accent);">Máquina de Vendas?</em></h2>
       <p>Comece agora. 30 dias grátis, sem cartão de crédito, sem complicação.</p>
-      <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg" onclick="trackSignupClick('cta_final')">
+      <a href="#" class="btn-primary btn-primary-lg" onclick="goSignup(event, 'pro', 'cta_final')">
         Criar minha conta grátis →
       </a>
       <div class="cta-guarantee">
@@ -2127,12 +2127,15 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
   let planoPendente = null;
   let cicloPendente = null;
 
-  function goSignup(e, plano) {
+  function goSignup(e, plano, origem) {
     if (e) e.preventDefault();
-    // Meta Pixel — clique em botão de plano abre modal de captura.
+    // Meta Pixel — clique em botão que abre modal de captura.
     // Conta como Lead (intenção qualificada de assinar).
     if (typeof fbq === 'function') {
-      fbq('track', 'Lead', { content_name: 'Plano ' + (plano || 'desconhecido'), content_category: 'plano' });
+      fbq('track', 'Lead', {
+        content_name: origem ? ('Testar grátis - ' + origem) : ('Plano ' + (plano || 'desconhecido')),
+        content_category: origem ? 'cta' : 'plano',
+      });
     }
     planoPendente = plano;
     cicloPendente = cicloAtual;
