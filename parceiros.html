@@ -483,6 +483,68 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     text-align: center;
   }
 
+  /* ── Lead Modal (form de parceria com embed.js) ── */
+  .lead-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    animation: fadeIn 0.2s ease-out;
+  }
+  .lead-modal-overlay.open { display: block; }
+  .lead-modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 480px; max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    z-index: 201;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: scaleIn 0.25s ease-out;
+  }
+  .lead-modal.open { display: flex; }
+  .lead-modal-header {
+    padding: 20px 24px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .lead-modal-title {
+    font-size: 17px; font-weight: 700; color: var(--text);
+  }
+  .lead-modal-subtitle {
+    font-size: 12px; color: var(--text-2); margin-top: 4px;
+  }
+  .lead-modal-close {
+    background: transparent; border: none;
+    color: var(--text-2); cursor: pointer;
+    width: 32px; height: 32px; border-radius: 8px;
+    font-size: 20px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .lead-modal-close:hover { background: var(--card-hover); color: var(--text); }
+  .lead-modal-body {
+    padding: 16px 16px 20px;
+    overflow-y: auto;
+  }
+  .lead-modal-body [data-tribocrm-form] {
+    border: none !important;
+    padding: 8px !important;
+    background: transparent !important;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
   /* ── WhatsApp flutuante ── */
   .wa-fab {
     position: fixed;
@@ -522,7 +584,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     <p class="subtitle">
       Comissão recorrente de <strong style="color:var(--text);">até 25%</strong> enquanto seu cliente pagar. Indicou, virou cliente, você ganha mês após mês — sem teto, sem prazo de validade.
     </p>
-    <button class="hero-cta" onclick="contactWhatsApp('hero')">
+    <button class="hero-cta" onclick="openLeadForm('hero')">
       Quero ser parceiro →
     </button>
     <a href="#como-funciona" class="hero-secondary">ou veja como funciona ↓</a>
@@ -841,7 +903,7 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
   <div class="container">
     <h2>Pronto pra <em>começar a indicar?</em></h2>
     <p>Fale com a gente no WhatsApp. Em até 48h você está cadastrado e com seu código em mãos.</p>
-    <button class="hero-cta" onclick="contactWhatsApp('cta_final')">
+    <button class="hero-cta" onclick="openLeadForm('cta_final')">
       Quero ser parceiro →
     </button>
   </div>
@@ -861,6 +923,21 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     <div class="footer-copy">© 2026 TriboCRM · Única Soluções Financeiras e Educacionais Eireli</div>
   </div>
 </footer>
+
+<!-- ────────────────────────────── LEAD MODAL (Form parceria) ────────────────────────────── -->
+<div class="lead-modal-overlay" id="leadOverlay" onclick="closeLeadForm()"></div>
+<div class="lead-modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle">
+  <div class="lead-modal-header">
+    <div>
+      <div class="lead-modal-title" id="leadModalTitle">Quero ser parceiro</div>
+      <div class="lead-modal-subtitle">Preenche aí que a gente continua a conversa no WhatsApp.</div>
+    </div>
+    <button class="lead-modal-close" onclick="closeLeadForm()" aria-label="Fechar">×</button>
+  </div>
+  <div class="lead-modal-body" id="leadModalBody">
+    <!-- embed.js injeta o formulário aqui na primeira abertura -->
+  </div>
+</div>
 
 <!-- ────────────────────────────── WHATSAPP FAB ────────────────────────────── -->
 <button class="wa-fab" onclick="contactWhatsApp('fab')" title="Falar no WhatsApp">
@@ -924,18 +1001,101 @@ src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
     item.classList.toggle('open');
   }
 
-  // ── WhatsApp ──
+  // ── WhatsApp (botão flutuante apenas — atalho direto) ──
   function contactWhatsApp(origem) {
-    // Meta Pixel — clique em "ser parceiro" via WhatsApp = Lead qualificado.
-    // Conta como Lead (intenção declarada) e Contact (vai conversar).
     if (typeof fbq === 'function') {
-      fbq('track', 'Lead', { content_name: 'Parceiro WhatsApp', content_category: 'parceria' });
-      fbq('track', 'Contact', { content_name: origem || 'parceiros' });
+      fbq('track', 'Contact', { content_name: origem || 'fab' });
     }
     var msg = 'Olá! Tenho interesse em conhecer o programa de parceria do TriboCRM.';
     var url = 'https://wa.me/5533991393031?text=' + encodeURIComponent(msg);
     window.open(url, '_blank');
   }
+
+  // ── Lead Form Modal (botões "Quero ser parceiro") ──
+  // Abre popup com formulário do TriboCRM (embed.js). Quando user
+  // submete, detecta o estado de sucesso via MutationObserver e
+  // redireciona pro WhatsApp pra continuar a conversa.
+  var leadFormLoaded = false;
+  var leadOrigem = '';
+  var leadSuccessObserver = null;
+
+  function openLeadForm(origem) {
+    leadOrigem = origem || 'unknown';
+
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { content_name: 'Parceiro Form', content_category: 'parceria' });
+    }
+
+    var overlay = document.getElementById('leadOverlay');
+    var modal = document.getElementById('leadModal');
+    overlay.classList.add('open');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Lazy-load do embed.js só na primeira abertura. Depois disso o
+    // form fica em cache no DOM e reabre instantaneamente.
+    if (!leadFormLoaded) {
+      var body = document.getElementById('leadModalBody');
+      var script = document.createElement('script');
+      script.src = 'https://api.tribocrm.com.br/public/embed.js';
+      script.setAttribute('data-form', 'b9a6a16ebbbf44e09d0625e6');
+      script.setAttribute('data-theme', 'dark');
+      body.appendChild(script);
+      leadFormLoaded = true;
+      startLeadSuccessWatcher();
+    }
+  }
+
+  function closeLeadForm() {
+    document.getElementById('leadOverlay').classList.remove('open');
+    document.getElementById('leadModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Detecta quando o embed.js troca o conteúdo do container pra
+  // mostrar o estado de sucesso (ele renderiza um SVG check verde
+  // dentro do container [data-tribocrm-form]). Quando detecta, dispara
+  // Contact no Pixel e redireciona pro WhatsApp depois de 1.5s pro
+  // user ver a confirmação.
+  function startLeadSuccessWatcher() {
+    var body = document.getElementById('leadModalBody');
+    if (!body || typeof MutationObserver === 'undefined') return;
+
+    leadSuccessObserver = new MutationObserver(function(mutations) {
+      // Procura por algum elemento dentro do body do modal cuja stroke
+      // do SVG seja a cor verde (#22c55e) — é o checkmark de sucesso
+      // que o embed.js injeta após submit OK.
+      var svgs = body.querySelectorAll('svg[stroke="#22c55e"]');
+      if (svgs.length > 0) {
+        leadSuccessObserver.disconnect();
+        onLeadSuccess();
+      }
+    });
+    leadSuccessObserver.observe(body, { childList: true, subtree: true });
+  }
+
+  function onLeadSuccess() {
+    if (typeof fbq === 'function') {
+      fbq('track', 'Contact', { content_name: 'Parceiro Form Submit', content_category: leadOrigem });
+    }
+
+    var msg = 'Olá! Acabei de preencher o formulário no site e tenho interesse no programa de parceria do TriboCRM.';
+    var url = 'https://wa.me/5533991393031?text=' + encodeURIComponent(msg);
+
+    // Pequeno delay pra usuário ver a confirmação de sucesso antes
+    // do redirect. Evita sensação de "sumiu sem feedback".
+    setTimeout(function() {
+      window.open(url, '_blank');
+      // Fecha o modal após abrir o WhatsApp em outra aba — usuário
+      // volta na aba do site e vê estado limpo.
+      closeLeadForm();
+    }, 1500);
+  }
+
+  // Fecha modal ao apertar ESC (acessibilidade básica).
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLeadForm();
+  });
 
   // ── Inicializa calculadora ──
   document.addEventListener('DOMContentLoaded', recalc);
