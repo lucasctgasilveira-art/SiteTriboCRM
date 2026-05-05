@@ -6,9 +6,29 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="apple-touch-icon" sizes="192x192" href="/favicon-192x192.png" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Meta Domain Verification (Business Manager) — só na home, conforme padrão Meta -->
+<meta name="facebook-domain-verification" content="wlfnz3m1f9wyiojthplpqcfo7gffbl" />
 <title>TriboCRM — A Máquina de Vendas para PMEs Brasileiras</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '3025078787691423');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1303,7 +1323,7 @@
   <div class="nav-cta">
     <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema" onclick="toggleTheme()">☀️</button>
     <a href="https://app.tribocrm.com.br" class="btn-ghost-sm">Entrar</a>
-    <a href="https://app.tribocrm.com.br/signup" class="btn-primary">Testar grátis →</a>
+    <a href="https://app.tribocrm.com.br/signup" class="btn-primary" onclick="trackSignupClick('nav')">Testar grátis →</a>
   </div>
 </nav>
 
@@ -1322,7 +1342,7 @@
   <p>Pipeline visual, WhatsApp integrado, automações inteligentes e a metodologia da Tribo de Vendas embutida. Tudo que você precisa para vender mais — sem complicar.</p>
 
   <div class="hero-cta">
-    <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg">
+    <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg" onclick="trackSignupClick('hero')">
       Começar grátis por 30 dias →
     </a>
     <a href="#funcionalidades" class="btn-outline-lg">
@@ -1803,7 +1823,7 @@
           <li>1.000 leads ativos</li>
           <li>1 funil de vendas</li>
         </ul>
-        <a href="https://app.tribocrm.com.br/signup?plano=solo" class="plan-btn plan-btn-ghost">Assinar</a>
+        <a href="https://app.tribocrm.com.br/signup?plano=solo" class="plan-btn plan-btn-ghost" onclick="trackSignupClick('solo')">Assinar</a>
       </div>
 
       <div class="plan-card" style="opacity:0.85;">
@@ -1941,7 +1961,7 @@
     <div class="reveal">
       <h2>Pronto para montar sua<br><em style="color:var(--accent);">Máquina de Vendas?</em></h2>
       <p>Comece agora. 30 dias grátis, sem cartão de crédito, sem complicação.</p>
-      <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg">
+      <a href="https://app.tribocrm.com.br/signup" class="btn-primary btn-primary-lg" onclick="trackSignupClick('cta_final')">
         Criar minha conta grátis →
       </a>
       <div class="cta-guarantee">
@@ -2109,6 +2129,11 @@
 
   function goSignup(e, plano) {
     if (e) e.preventDefault();
+    // Meta Pixel — clique em botão de plano abre modal de captura.
+    // Conta como Lead (intenção qualificada de assinar).
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { content_name: 'Plano ' + (plano || 'desconhecido'), content_category: 'plano' });
+    }
     planoPendente = plano;
     cicloPendente = cicloAtual;
     openLeadModal(e);
@@ -2194,7 +2219,7 @@
   }
 </script>
 
-<button type="button" class="wa-fab" aria-label="Abrir WhatsApp" onclick="toggleWaPopup()">
+<button type="button" class="wa-fab" aria-label="Abrir WhatsApp" onclick="trackWaPopupOpen(); toggleWaPopup()">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
     <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.83c0 2.08.54 4.11 1.58 5.9L0 24l6.43-1.69a11.82 11.82 0 0 0 5.61 1.43h.01c6.54 0 11.84-5.3 11.84-11.83 0-3.16-1.23-6.13-3.37-8.43ZM12.05 21.3a9.82 9.82 0 0 1-5.01-1.37l-.36-.21-3.82 1 1.02-3.72-.24-.38a9.84 9.84 0 0 1-1.5-5.22c0-5.43 4.42-9.85 9.87-9.85 2.63 0 5.1 1.03 6.96 2.9a9.77 9.77 0 0 1 2.89 6.96c0 5.43-4.43 9.85-9.87 9.85Zm5.4-7.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.15-.17.2-.35.22-.65.08-.3-.15-1.26-.46-2.4-1.48-.89-.8-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.59-.49-.51-.67-.52l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.09 1.75-.72 2-1.41.25-.7.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35Z"/>
   </svg>
@@ -2269,8 +2294,35 @@
       });
     } catch (_) {}
 
+    // Meta Pixel — usuário enviou nome+telefone+email pelo popup do WhatsApp.
+    // Vale como Lead (forneceu dados de contato) E Contact (vai pro WhatsApp).
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { content_name: 'WhatsApp Form' });
+      fbq('track', 'Contact');
+    }
+
     var msg = 'Olá! Meu nome é ' + name + ' e gostaria de saber mais sobre o TriboCRM.';
     window.location.href = 'https://wa.me/5533991393031?text=' + encodeURIComponent(msg);
+  }
+
+  // Helper exposto pra disparar evento Lead em qualquer botão "Testar grátis"
+  // que leva pro signup do app. Usar via onclick no botão. Retorna true pra
+  // não cancelar a navegação default do <a>.
+  function trackSignupClick(plano) {
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead', { content_name: 'Testar grátis', content_category: plano || 'home' });
+    }
+    return true;
+  }
+
+  // Helper exposto pra rastrear cliques que abrem o popup do WhatsApp
+  // (não dispara Contact, só InitiateCheckout proxy via Lead se quiser).
+  // Por simplicidade, abrir o popup ainda não é Contact — só conta quando
+  // o user de fato envia mensagem (sendWaMessage acima).
+  function trackWaPopupOpen() {
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', 'WhatsAppPopupOpen');
+    }
   }
 </script>
 

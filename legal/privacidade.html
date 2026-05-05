@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Política de Privacidade do TriboCRM — conformidade com a LGPD (Lei 13.709/2018).">
   <title>Política de Privacidade — TriboCRM</title>
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '3025078787691423');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=3025078787691423&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
   <link rel="apple-touch-icon" sizes="512x512" href="/favicon-512x512.png">
@@ -204,6 +223,7 @@
           <tr><td>Google (Gmail/Calendar)</td><td>Integrações autorizadas pelo usuário</td><td>EUA</td></tr>
           <tr><td>Resend</td><td>Envio de e-mails do sistema</td><td>EUA</td></tr>
           <tr><td>Sentry</td><td>Monitoramento de erros (dados técnicos anonimizados)</td><td>EUA</td></tr>
+          <tr><td>Meta (Facebook/Instagram)</td><td>Pixel de rastreamento na landing pública (PageView, cliques) para remarketing e mensuração de campanhas. Não rastreamos comportamento dentro do sistema TriboCRM.</td><td>EUA / Irlanda</td></tr>
         </tbody>
       </table>
       <p>Todos os compartilhamentos são feitos com provedores que oferecem garantias adequadas de proteção de dados.</p>
@@ -272,9 +292,11 @@
           <tr><td>Essenciais</td><td>Manter sessão de login, segurança</td><td>Não (sem eles o sistema não funciona)</td></tr>
           <tr><td>Analíticos</td><td>Entender uso da plataforma (dados agregados)</td><td>Sim (configurações do navegador)</td></tr>
           <tr><td>Preferências</td><td>Lembrar tema e outras preferências</td><td>Sim</td></tr>
+          <tr><td>Marketing (Meta Pixel)</td><td>Mensurar visitas e cliques na landing pública (tribocrm.com.br) para remarketing e otimização de campanhas no Facebook e Instagram. Não rastreamos comportamento dentro do sistema TriboCRM.</td><td>Sim (configurações do navegador, bloqueadores de tracker, ou opt-out via <a href="https://www.facebook.com/help/568137493302217" target="_blank" rel="noopener">Configurações de Anúncios da Meta</a>)</td></tr>
+          <tr><td>Indicação de parceiro</td><td>Cookie <code>tribocrm_ref</code> (30 dias) para creditar comissão ao parceiro indicador quando você se cadastra via link <code>?ref=CODIGO</code>.</td><td>Sim</td></tr>
         </tbody>
       </table>
-      <p>Não utilizamos cookies de publicidade ou rastreamento para fins de marketing de terceiros.</p>
+      <p>O cookie do Meta Pixel é colocado apenas em páginas públicas da landing (tribocrm.com.br). Dentro do sistema TriboCRM (app.tribocrm.com.br), não há rastreamento de marketing — apenas cookies essenciais e analíticos próprios.</p>
 
       <h2>12. Dados de menores de idade</h2>
       <p>O TriboCRM é destinado exclusivamente a uso profissional. Não coletamos intencionalmente dados de menores de 18 anos. Caso isso ocorra, excluiremos imediatamente.</p>
